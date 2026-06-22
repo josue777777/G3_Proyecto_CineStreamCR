@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/.github/">
+    <File Path="instructions.md" />
+  </Folder>
+  <Folder Name="/.github/agents/" />
+  <Project Path="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj" />
+  <Project Path="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+  <Project Path="G3_Proyecto_CineStreamCR/G3_Proyecto_CineStreamCR.csproj" />
+</Solution>
