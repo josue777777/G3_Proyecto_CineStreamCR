@@ -19,4 +19,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositorios\Calificacion\" />
+    <Folder Include="Repositorios\Reproduccion\" />
+    <Folder Include="Repositorios\WatchList\" />
+    <Folder Include="Repositorios\Persona\" />
+    <Folder Include="Repositorios\Usuario\" />
+    <Folder Include="Repositorios\Pelicula\" />
+  </ItemGroup>
+
 </Project>
