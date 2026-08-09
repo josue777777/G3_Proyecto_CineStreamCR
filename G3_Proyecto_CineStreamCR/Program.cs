@@ -1,5 +1,7 @@
 using G3_Proyecto_CineStreamCR.DAL.Data;
 using Microsoft.EntityFrameworkCore;
+using G3_Proyecto_CineStreamCR.BLL.Services.Usuario;
+using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
 
 // Program.cs
 // Punto de entrada principal de la aplicación.
@@ -25,6 +27,15 @@ var connectionString =
 // utilizando SQLite.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
+
+// ====================== DEPENDENCIAS DE USUARIO ======================
+
+// Repositorio de acceso a datos de usuarios.
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+// Servicio de lógica de negocio para autenticación y usuarios.
+builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
+
 
 
 // Los repositorios y servicios BLL se registrarán posteriormente

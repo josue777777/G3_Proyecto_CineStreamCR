@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.10" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,13 +16,11 @@
     <Folder Include="Dtos\Reproducciones\" />
     <Folder Include="Dtos\WatchLists\" />
     <Folder Include="Dtos\Personas\" />
-    <Folder Include="Dtos\Usuarios\" />
     <Folder Include="Dtos\Peliculas\" />
     <Folder Include="Services\Calificacion\" />
     <Folder Include="Services\Reproduccion\" />
     <Folder Include="Services\WatchList\" />
     <Folder Include="Services\Persona\" />
-    <Folder Include="Services\Usuario\" />
     <Folder Include="Services\Pelicula\" />
   </ItemGroup>
 
