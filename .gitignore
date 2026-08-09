@@ -350,6 +350,13 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+# Ignore local SQLite database files used for development
+# Specific project files
+G3_Proyecto_CineStreamCR/CineStreamCR.db
+G3_Proyecto_CineStreamCR.DAL/CineStreamCR.db
+# Common pattern for local SQLite DBs (uncomment if desired)
+# *.db
+
 # BeatPulse healthcheck temp database
 healthchecksdb
 
