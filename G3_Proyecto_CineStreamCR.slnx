@@ -3,7 +3,12 @@
     <File Path="instructions.md" />
   </Folder>
   <Folder Name="/.github/agents/" />
-  <Project Path="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj" />
+  <Project Path="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj">
+    <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+  </Project>
   <Project Path="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
-  <Project Path="G3_Proyecto_CineStreamCR/G3_Proyecto_CineStreamCR.csproj" />
+  <Project Path="G3_Proyecto_CineStreamCR/G3_Proyecto_CineStreamCR.csproj">
+    <BuildDependency Project="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj" />
+    <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+  </Project>
 </Solution>

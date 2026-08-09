@@ -1,74 +1,80 @@
+using G3_Proyecto_CineStreamCR.DAL.Data;
+using Microsoft.EntityFrameworkCore;
+
 // Program.cs
 // Punto de entrada principal de la aplicación.
-// Aquí se inicializan y configuran todos los servicios y el pipeline HTTP
-// para finalmente levantar la aplicación web.
-
+// Aquí se registran los servicios y se configura el pipeline HTTP.
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // ====================== SERVICIOS ======================
 
-// Agrega los servicios necesarios para trabajar con MVC
-// (Controladores y Vistas)
+// Agrega soporte para MVC:
+// Controllers + Views.
 builder.Services.AddControllersWithViews();
-// Registrar servicios de la capa BLL (el registro manual fue cancelado por petición)
+
+
+// ====================== BASE DE DATOS ======================
+
+// Obtiene la cadena de conexión desde appsettings.json.
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Registra ApplicationDbContext mediante inyección de dependencias
+// utilizando SQLite.
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(connectionString));
+
+
+// Los repositorios y servicios BLL se registrarán posteriormente
+// conforme se implemente cada módulo.
 
 
 // ====================== CONSTRUCCIÓN DE LA APP ======================
 
-// Construye la aplicación con todos los servicios registrados
 var app = builder.Build();
 
 
-// ====================== CONFIGURACIÓN DEL PIPELINE ======================
+// ====================== PIPELINE HTTP ======================
 
-// Si NO estamos en ambiente de desarrollo (Producción)
 if (!app.Environment.IsDevelopment())
 {
-    // Redirige a una página de error personalizada
+    // Manejo de errores en ambientes diferentes a desarrollo.
     app.UseExceptionHandler("/Home/Error");
 
-    // Habilita HSTS para mayor seguridad (HTTPS obligatorio)
+    // Fuerza políticas de seguridad HTTPS.
     app.UseHsts();
 }
 
-// Fuerza las solicitudes HTTP a HTTPS
+
+// Redirección HTTP -> HTTPS.
 app.UseHttpsRedirection();
 
-// Habilita el sistema de enrutamiento (Routing)
+
+// Habilita enrutamiento.
 app.UseRouting();
 
-// Habilita la autorización de usuarios
-// (si se implementan Login, Roles, etc.)
+
+// Habilita autorización.
+// La autenticación y sesión se configurarán cuando se implemente Login.
 app.UseAuthorization();
 
 
 // ====================== ARCHIVOS ESTÁTICOS ======================
 
-// Permite servir archivos estáticos como:
-// CSS, JavaScript, imágenes, Bootstrap, etc.
+// Permite servir CSS, JavaScript, imágenes y otros recursos.
 app.MapStaticAssets();
 
 
 // ====================== RUTA POR DEFECTO ======================
 
-// Define la ruta principal del proyecto:
-//
-// HomeController -> controlador por defecto
-// Index() -> acción por defecto
-// id -> parámetro opcional
-//
-// Ejemplo:
-// https://localhost:7000/
-// va a ejecutar HomeController -> Index()
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
-// ====================== EJECUCIÓN DE LA APLICACIÓN ======================
+// ====================== EJECUCIÓN ======================
 
-// Inicia y mantiene la aplicación en ejecución
 app.Run();

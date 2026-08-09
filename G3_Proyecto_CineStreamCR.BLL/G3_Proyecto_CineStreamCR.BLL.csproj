@@ -10,4 +10,23 @@
     <PackageReference Include="AutoMapper" Version="16.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\Calificaciones\" />
+    <Folder Include="Dtos\Reproducciones\" />
+    <Folder Include="Dtos\WatchLists\" />
+    <Folder Include="Dtos\Personas\" />
+    <Folder Include="Dtos\Usuarios\" />
+    <Folder Include="Dtos\Peliculas\" />
+    <Folder Include="Services\Calificacion\" />
+    <Folder Include="Services\Reproduccion\" />
+    <Folder Include="Services\WatchList\" />
+    <Folder Include="Services\Persona\" />
+    <Folder Include="Services\Usuario\" />
+    <Folder Include="Services\Pelicula\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\G3_Proyecto_CineStreamCR.DAL\G3_Proyecto_CineStreamCR.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

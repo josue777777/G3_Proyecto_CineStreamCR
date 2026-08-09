@@ -1,409 +1,428 @@
 # CineStream CR - Instrucciones y buenas prácticas
 
-Este documento define las reglas de desarrollo para el Proyecto Final
-"CineStream CR" del curso SC-701 Programación Avanzada.
+Este documento define las reglas permanentes de desarrollo para CineStream CR.
 
-El objetivo es mantener una arquitectura sencilla, clara, mantenible y
-alineada con los contenidos vistos en clase y con el enunciado oficial.
+Su objetivo es mantener una arquitectura clara, mantenible, escalable y
+coherente con los contenidos desarrollados en el curso y con el enunciado
+oficial del proyecto.
 
-Antes de realizar cualquier modificación en el proyecto, revisar estas
-instrucciones y respetar la arquitectura existente.
+Antes de realizar cambios importantes en el proyecto, revisar estas reglas.
+
+Este documento debe contener principios y decisiones permanentes.
+
+No debe utilizarse como:
+
+- bitácora de errores;
+- historial de commits;
+- registro de problemas puntuales;
+- lista de todos los archivos existentes;
+- documentación temporal de una implementación específica.
 
 
-# 1. Alcance del proyecto
+# 1. Alcance general
 
-CineStream CR es una plataforma web de streaming de películas inspirada
-visualmente en plataformas como Netflix, Disney+, HBO Max o Prime Video.
+CineStream CR es una plataforma web de streaming de películas.
 
-Implementar únicamente las funcionalidades solicitadas en el enunciado:
+La aplicación debe inspirarse visualmente en plataformas modernas de streaming,
+sin copiar directamente código, diseños completos o recursos protegidos de
+terceros.
 
-- Login.
-- Catálogo de películas.
-- Búsqueda, filtros, paginación y ordenamiento.
-- Detalle de películas.
-- Información de directores y actores.
-- WatchLists.
-- Calificaciones y reseñas.
-- Reproducción de películas.
-- Mini-reproductor persistente.
-- Notificaciones visuales.
-- Indicadores de carga.
-- Diseño responsive.
-- Tema oscuro.
+Las funcionalidades deben mantenerse dentro del alcance definido por el
+enunciado oficial.
 
-No agregar funcionalidades no solicitadas como:
+Antes de incorporar una funcionalidad nueva, comprobar:
 
-- Suscripciones.
-- Pagos.
-- Planes premium.
-- Recomendaciones mediante IA.
-- Chats.
-- Redes sociales.
-- Funcionalidades administrativas adicionales.
+1. si aparece directamente en el enunciado;
+2. si es técnicamente necesaria para cumplir un requerimiento existente;
+3. si respeta la arquitectura del proyecto.
 
-Si una nueva funcionalidad no aparece en el enunciado, no implementarla
-sin autorización previa.
+Si no cumple ninguna de estas condiciones, no implementarla sin autorización.
 
 
 # 2. Arquitectura
 
-Mantener la arquitectura actual por capas:
+Mantener una arquitectura por capas con responsabilidades claramente
+separadas.
 
-G3_Proyecto_CineStreamCR
-    -> Proyecto ASP.NET Core MVC.
-    -> Interfaz de usuario.
-    -> Controllers, Views, ViewModels y recursos frontend.
+Arquitectura conceptual:
 
-G3_Proyecto_CineStreamCR.BLL
-    -> Capa de lógica de negocio.
-    -> DTOs.
-    -> Servicios.
-    -> Interfaces de servicios.
-    -> AutoMapper.
+Presentación
+    ↓
+Lógica de negocio
+    ↓
+Acceso a datos
+    ↓
+Entity Framework Core
+    ↓
+Base de datos
 
-G3_Proyecto_CineStreamCR.DAL
-    -> Capa de acceso a datos.
-    -> Entidades.
-    -> Repositorios.
-    -> Interfaces de repositorios.
-    -> ApplicationDbContext.
-    -> Migraciones.
-    -> SQLite.
+La capa de presentación se basa principalmente en ASP.NET Core MVC.
 
-Flujo principal:
+La capa de lógica de negocio contiene las reglas y operaciones propias del
+dominio.
 
-MVC
- -> BLL / Services
- -> DAL / Repositories
- -> Entity Framework Core
- -> SQLite
+La capa de acceso a datos administra la persistencia mediante repositorios y
+Entity Framework Core.
 
-No acceder directamente a ApplicationDbContext desde los Controllers.
+Reglas:
 
-No acceder directamente a repositorios desde las Views.
+- Los Controllers no deben acceder directamente al DbContext.
+- Las Views no deben acceder a repositorios.
+- Las Views no deben contener lógica de negocio.
+- Los Controllers coordinan solicitudes, respuestas y navegación.
+- Los Services contienen reglas de negocio.
+- Los Repositories administran acceso a datos.
+- El DbContext administra la interacción de Entity Framework Core con la base
+  de datos.
 
-No colocar lógica de negocio en las Views.
+Evitar dependencias que rompan el flujo natural entre capas.
 
 
 # 3. API
 
-Actualmente una API independiente NO es requisito obligatorio para
-la arquitectura base del proyecto.
+Una Web API independiente no es obligatoria para la arquitectura base.
 
-No crear un proyecto Web API adicional salvo que una funcionalidad
-realmente lo requiera y haya sido previamente autorizada.
+No agregar una API únicamente por complejidad técnica aparente o por preferencia
+personal.
 
-Cuando sea posible resolver una funcionalidad manteniendo MVC + BLL + DAL,
-preferir la arquitectura existente.
+Agregar una API solamente cuando:
 
-Si posteriormente se requiere una API para funcionalidades dinámicas,
-debe reutilizar la BLL existente y no duplicar lógica de negocio.
+- exista un requerimiento que realmente la necesite;
+- facilite una funcionalidad dinámica importante;
+- exista una razón arquitectónica clara;
+- haya sido previamente autorizada.
 
+Si se incorpora una API:
 
-# 4. Organización de carpetas
-
-DAL:
-
-Entidades/
-    Usuario.cs
-    Persona.cs
-    Genero.cs
-    Pelicula.cs
-    PeliculaGenero.cs
-    PeliculaActor.cs
-    WatchList.cs
-    WatchListPelicula.cs
-    Calificacion.cs
-    Reproduccion.cs
-
-Repositorios/
-    Usuario/
-    Persona/
-    Pelicula/
-    WatchList/
-    Calificacion/
-    Reproduccion/
-
-Data/
-    ApplicationDbContext.cs
+- debe reutilizar la lógica de negocio existente;
+- no debe duplicar Services;
+- no debe duplicar Repositories;
+- no debe duplicar reglas de negocio;
+- debe mantener la separación por capas.
 
 
-BLL:
+# 4. Organización del código
 
-Dtos/
-    Usuarios/
-    Personas/
-    Peliculas/
-    WatchLists/
-    Calificaciones/
-    Reproducciones/
+Organizar el código por responsabilidad.
 
-Services/
-    Usuario/
-    Persona/
-    Pelicula/
-    WatchList/
-    Calificacion/
-    Reproduccion/
+Ejemplo conceptual:
 
-MapeoClases.cs
+Presentación
+    Controllers/
+    Models/
+    ViewModels/
+    Views/
+    recursos frontend/
 
+Negocio
+    DTOs/
+    Services/
+    Interfaces/
+    configuración de mapeo/
 
-MVC:
+Datos
+    Entidades/
+    Repositories/
+    Interfaces/
+    Data/
+    Migrations/
 
-Controllers/
-Models/
-ViewModels/
-Views/
-wwwroot/
+La estructura puede crecer conforme aparezcan nuevos módulos.
+
+No actualizar este documento únicamente para registrar cada archivo nuevo.
+
+Evitar carpetas innecesarias cuando todavía no exista suficiente código que
+justifique la separación.
 
 
 # 5. Entity Framework Core
 
-Utilizar SQLite mediante Entity Framework Core.
+Utilizar Entity Framework Core para la persistencia.
 
-Registrar ApplicationDbContext mediante inyección de dependencias.
+Registrar el DbContext mediante inyección de dependencias.
 
-No hardcodear la cadena de conexión dentro de ApplicationDbContext.
+No hardcodear cadenas de conexión dentro del DbContext.
 
-La cadena debe obtenerse desde configuración, por ejemplo:
+Obtener la configuración desde mecanismos como:
 
-appsettings.json
-appsettings.Development.json
-User Secrets
-variables de entorno.
+- archivos de configuración;
+- configuración específica de desarrollo;
+- User Secrets;
+- variables de entorno.
 
-Utilizar migraciones para modificar el esquema:
+Las relaciones, restricciones, índices y claves compuestas deben configurarse
+principalmente mediante Fluent API cuando corresponda.
 
-Add-Migration NombreMigracion
-Update-Database
+Utilizar migraciones para crear y evolucionar el esquema de base de datos.
 
-No modificar manualmente migraciones que ya hayan sido aplicadas.
+No modificar manualmente migraciones que ya hayan sido aplicadas y compartidas
+como parte estable del proyecto.
 
-ApplicationDbContext debe permanecer en:
+Entity Framework Core y sus migraciones representan la fuente real del esquema.
 
-G3_Proyecto_CineStreamCR.DAL/Data
-
-# Clarificaciones adicionales sobre Entity Framework Core
-
-- Las entidades pertenecen al DAL y deben definirse dentro de G3_Proyecto_CineStreamCR.DAL/Entidades.
-- Las relaciones entre entidades se configuran principalmente mediante Fluent API en ApplicationDbContext.
-- Las propiedades de navegación representan relaciones entre entidades y deben diseñarse para reflejar correctamente esas relaciones.
-- EF Core será la fuente real del esquema mediante migraciones; cualquier script SQL (por ejemplo script.sql) funciona únicamente como documentación del esquema esperado.
-
-Control de paquetes NuGet (regla breve)
-
-- Mantener los paquetes compatibles con .NET 8.
-- Evitar mezclar versiones mayores de Entity Framework Core.
-- Los paquetes Microsoft.EntityFrameworkCore.* utilizados conjuntamente deben mantenerse en versiones compatibles entre sí.
-- Revisar advertencias NU19xx de vulnerabilidades antes de entregar.
-- No actualizar paquetes automáticamente a una versión mayor solo porque NuGet indique que existe una actualización.
-- Una actualización de paquetes debe realizarse de forma controlada, recompilando y probando el proyecto después del cambio.
+Los scripts SQL auxiliares deben considerarse documentación o apoyo, salvo que
+se acuerde explícitamente otra estrategia.
 
 
-# 6. Consultas y tracking
+# 6. Base de datos
 
-Utilizar métodos async para operaciones de acceso a datos:
+Utilizar SQLite como repositorio principal mientras siga siendo la tecnología
+seleccionada para el proyecto.
 
-ToListAsync()
-FirstOrDefaultAsync()
-AnyAsync()
-SaveChangesAsync()
+Diseñar la base de datos buscando:
 
-Utilizar IQueryable cuando permita construir consultas dinámicas,
-especialmente para:
+- integridad;
+- normalización razonable;
+- claridad;
+- relaciones explícitas;
+- ausencia de duplicación innecesaria;
+- facilidad de mantenimiento.
 
-- búsqueda por título;
-- filtros por género;
-- filtros por año;
+No duplicar entidades que representen el mismo concepto cuando una relación
+pueda resolver correctamente la diferencia de comportamiento.
+
+Las reglas importantes de integridad no deben depender solamente de la
+interfaz de usuario.
+
+
+# 7. Entidades y relaciones
+
+Todas las entidades persistentes administradas por Entity Framework Core deben
+ser públicas.
+
+Las propiedades públicas no deben exponer tipos con menor accesibilidad.
+
+Las colecciones de navegación deben mantenerse inicializadas cuando corresponda.
+
+Ejemplo conceptual:
+
+public ICollection<TEntidadRelacionada> Elementos { get; set; }
+    = new List<TEntidadRelacionada>();
+
+Las propiedades de navegación deben representar relaciones reales del dominio.
+
+Evitar relaciones redundantes o propiedades de navegación que no sean
+necesarias.
+
+
+# 8. Integridad y restricciones
+
+Configurar a nivel de base de datos cuando corresponda:
+
+- claves primarias;
+- claves foráneas;
+- campos obligatorios;
+- longitudes máximas;
+- índices;
+- índices únicos;
+- claves compuestas;
+- relaciones muchos a muchos;
+- comportamiento de eliminación;
+- restricciones de duplicidad.
+
+Las validaciones de interfaz no sustituyen las restricciones estructurales de
+base de datos.
+
+
+# 9. Consultas
+
+Utilizar IQueryable cuando permita construir consultas dinámicas.
+
+Esto es especialmente importante para:
+
+- búsquedas;
+- filtros;
 - ordenamiento;
 - paginación.
 
-Usar AsNoTracking() en consultas exclusivamente de lectura.
+Aplicar filtros y ordenamiento antes de ejecutar la consulta contra la base de
+datos.
+
+Evitar obtener una colección completa para posteriormente filtrar en memoria
+cuando la operación pueda realizarse desde la base de datos.
+
+Preferir métodos asíncronos de Entity Framework Core para operaciones de
+entrada y salida.
+
+
+# 10. Tracking
+
+Utilizar AsNoTracking() en consultas exclusivamente de lectura.
 
 Ejemplos:
 
-- catálogo;
-- detalle únicamente para mostrar;
+- catálogos;
+- búsquedas;
+- detalles de solo lectura;
 - perfiles;
-- búsquedas.
+- listados.
 
-Mantener tracking cuando la entidad obtenida vaya a ser modificada
-o eliminada.
+Mantener tracking cuando una entidad obtenida vaya a:
 
-No utilizar "Astracking".
+- modificarse;
+- eliminarse;
+- actualizarse dentro de la misma unidad de trabajo.
 
-EF Core realiza tracking por defecto.
+Entity Framework Core realiza tracking por defecto.
 
-AsTracking() únicamente debe utilizarse explícitamente cuando sea
-necesario dejar clara esa intención.
+Utilizar AsTracking() explícitamente solamente cuando exista una razón clara.
 
 
-# 7. Repositorios
+# 11. Repositories
 
-Los repositorios son responsables únicamente del acceso a datos.
+Los Repositories son responsables del acceso a datos.
 
-No colocar reglas de negocio en los repositorios.
+Responsabilidades válidas:
 
-Ejemplos de responsabilidades válidas:
-
-- obtener películas;
-- buscar por Id;
-- consultar WatchLists;
-- agregar entidades;
-- actualizar entidades;
-- eliminar entidades;
+- consultar información;
+- buscar por identificadores;
+- construir consultas;
+- agregar registros;
+- actualizar registros;
+- eliminar registros;
 - guardar cambios.
 
-No utilizar listas estáticas o datos simulados en memoria cuando exista
-un repositorio real conectado a Entity Framework Core.
+No colocar reglas de negocio dentro de Repositories.
+
+No utilizar datos simulados o listas estáticas una vez exista persistencia real
+para ese módulo.
 
 
-# 8. Servicios BLL
+# 12. Services
 
-Los servicios contienen las reglas de negocio.
+Los Services representan la capa de lógica de negocio.
 
-Ejemplos:
+Deben encargarse de:
 
-- validar login;
-- crear y modificar WatchLists;
-- impedir duplicados;
-- validar calificaciones entre 1 y 10;
-- actualizar progreso de reproducción;
-- decidir si una película ya pertenece a una WatchList.
+- validaciones de negocio;
+- decisiones de dominio;
+- prevención de operaciones inválidas;
+- coordinación entre repositorios;
+- transformación de datos cuando corresponda.
 
-Los Controllers deben delegar estas operaciones a los servicios.
+Los Controllers deben delegar las reglas de negocio a los Services.
 
-
-# 9. DTOs
-
-Las entidades de DAL representan la base de datos.
-
-Los DTOs representan la información que se mueve entre capas.
-
-No utilizar las entidades directamente como modelos de las Views cuando
-un DTO o ViewModel sea más apropiado.
-
-Organizar DTOs por módulo.
-
-Ejemplo:
-
-Dtos/Peliculas/PeliculaDto.cs
-Dtos/Usuarios/UsuarioDto.cs
-Dtos/WatchLists/WatchListDto.cs
-
-Evitar múltiples DTOs innecesarios para una misma entidad.
-
-Crear DTOs adicionales únicamente cuando exista una diferencia real
-entre las operaciones.
+Evitar Controllers con lógica compleja.
 
 
-# 10. AutoMapper
+# 13. DTOs
 
-Centralizar los mapeos en:
+Los DTOs representan datos transferidos entre capas.
 
-BLL/MapeoClases.cs
+No deben utilizarse como sustituto automático de todas las clases existentes.
 
-Ejemplo:
+Crear DTOs cuando:
 
-CreateMap<Pelicula, PeliculaDto>().ReverseMap();
+- sea necesario controlar qué información se expone;
+- una operación requiera datos diferentes;
+- se necesite desacoplar persistencia y presentación.
 
-Agregar configuraciones específicas únicamente cuando las propiedades
-no coincidan directamente.
+Evitar crear múltiples DTOs que contengan exactamente la misma información sin
+una necesidad real.
 
-No realizar mapeos manuales repetitivos si AutoMapper ya puede resolverlos.
+Organizar los DTOs por responsabilidad o módulo cuando el tamaño del proyecto lo
+justifique.
 
 
-# 11. Validaciones
+# 14. ViewModels
+
+Los ViewModels representan información específica necesaria para una View.
+
+Pueden combinar información proveniente de diferentes DTOs cuando la interfaz lo
+requiera.
+
+No colocar reglas de negocio dentro de ViewModels.
+
+No utilizar entidades persistentes directamente en la interfaz cuando un
+ViewModel permita mantener una separación adecuada.
+
+
+# 15. Mapeo
+
+Centralizar la configuración de mapeo entre entidades, DTOs y otros modelos
+cuando se utilice una herramienta de mapeo.
+
+Evitar mapeos manuales repetitivos si pueden resolverse de manera clara mediante
+la configuración existente.
+
+Utilizar configuraciones específicas únicamente cuando las propiedades no
+coincidan directamente o sea necesario transformar información.
+
+
+# 16. Validaciones
 
 Aplicar validaciones tanto en cliente como en servidor cuando corresponda.
 
-Utilizar DataAnnotations para validaciones básicas:
+Utilizar DataAnnotations para validaciones básicas como:
 
-[Required]
-[StringLength]
-[Range]
-[EmailAddress]
+- campos requeridos;
+- longitudes;
+- rangos;
+- formatos de correo;
+- formatos válidos.
 
-Nunca confiar únicamente en validaciones de JavaScript.
+Nunca confiar únicamente en JavaScript.
 
-Las reglas importantes también deben validarse en la BLL.
+Las reglas importantes del dominio deben validarse también en la capa de lógica
+de negocio.
+
+Las restricciones estructurales importantes deben reforzarse en base de datos
+cuando corresponda.
 
 
-# 12. Seguridad del login
+# 17. Seguridad
 
 Nunca almacenar contraseñas en texto plano.
 
-Guardar únicamente un hash seguro de la contraseña.
+Guardar únicamente hashes seguros de contraseña.
 
-La entidad Usuario debe utilizar una propiedad similar a:
+La información relacionada con credenciales nunca debe exponerse innecesariamente
+a la capa de presentación.
 
-PasswordHash
+No almacenar contraseñas ni hashes dentro de:
 
-No devolver PasswordHash en DTOs ni mostrarlo en Views.
+- ViewBag;
+- ViewData;
+- TempData;
+- Session;
+- modelos enviados al navegador cuando no sean necesarios.
 
-Los mensajes de login deben ser descriptivos para el usuario según los
-requisitos del proyecto.
+La identidad del usuario debe determinarse mediante el mecanismo de
+autenticación o sesión utilizado por la aplicación.
 
-
-# 13. Modelo de personas
-
-Utilizar una entidad Persona para representar directores y actores.
-
-No crear entidades separadas Director y Actor salvo que aparezca una
-necesidad real que lo justifique.
-
-Una película mantiene su director mediante IdDirector.
-
-Los actores se relacionan mediante PeliculaActor.
-
-PeliculaActor debe almacenar también el personaje interpretado.
+Las operaciones asociadas a un usuario no deben confiar ciegamente en un
+identificador enviado desde la interfaz.
 
 
-# 14. Calificaciones y reseñas
+# 18. Sesión y autenticación
 
-Mantener puntuación y reseña opcional en el mismo modelo de interacción.
+Centralizar la autenticación dentro del módulo correspondiente.
 
-La puntuación debe estar entre 1 y 10.
+Después de una autenticación correcta, almacenar en sesión solamente la
+información mínima necesaria para identificar al usuario.
 
-Un usuario debe mantener como máximo una calificación por película.
+Las operaciones personalizadas deben utilizar la identidad autenticada.
 
-Si vuelve a calificar, actualizar la existente en lugar de crear
-registros duplicados.
-
-
-# 15. WatchLists
-
-Cada WatchList pertenece a un usuario.
-
-Una WatchList puede contener varias películas.
-
-Una película puede aparecer en varias WatchLists.
-
-Evitar insertar dos veces la misma película dentro de la misma WatchList.
+Evitar duplicar lógica de autenticación entre Controllers.
 
 
-# 16. Reproducción
+# 19. Async / Await
 
-El progreso debe poder persistirse por usuario y película.
+Preferir async/await para:
 
-Guardar como mínimo:
+- acceso a base de datos;
+- operaciones de entrada y salida;
+- llamadas HTTP;
+- lectura o escritura de archivos;
+- operaciones externas.
 
-- IdUsuario.
-- IdPelicula.
-- SegundoActual.
-- FechaUltimaReproduccion.
+No crear métodos async si no contienen operaciones asíncronas reales.
 
-Debe existir como máximo un progreso actual por usuario y película.
-
-El reproductor y mini-reproductor son principalmente responsabilidades
-de interfaz.
-
-La reproducción persistente entre navegaciones debe diseñarse evitando
-reiniciar innecesariamente el elemento de video.
+No utilizar Task.FromResult() únicamente para aparentar comportamiento
+asíncrono cuando exista una fuente de datos real.
 
 
-# 17. Código y estilo
+# 20. Código y estilo
 
 Mantener nullable habilitado.
 
@@ -415,288 +434,433 @@ Utilizar PascalCase para:
 - métodos;
 - propiedades.
 
-Utilizar camelCase para variables locales y parámetros.
+Utilizar camelCase para:
 
-Preferir nombres en español porque la estructura actual del proyecto se
-encuentra en español.
+- variables locales;
+- parámetros.
 
-No mezclar nombres duplicados en inglés y español para la misma
-responsabilidad.
+Mantener una convención de nombres consistente en todo el proyecto.
 
-Ejemplo incorrecto:
+No mantener dos clases o servicios diferentes para representar exactamente la
+misma responsabilidad.
 
-MovieService
-PeliculaServicio
-
-Debe existir solamente PeliculaServicio.
+Preferir claridad antes que abreviaciones innecesarias.
 
 
-# 18. Async / Await
+# 21. SOLID
 
-Preferir métodos async para:
+Aplicar SOLID de forma práctica.
 
-- acceso a base de datos;
-- operaciones de entrada/salida;
-- carga de información.
+No introducir abstracciones únicamente para afirmar que se utiliza SOLID.
 
-No crear métodos async que no ejecuten ninguna operación asíncrona.
+Buscar especialmente:
 
-Evitar:
+Single Responsibility:
+cada clase debe tener una responsabilidad principal clara.
 
-Task.FromResult()
+Open/Closed:
+evitar modificar componentes no relacionados cuando se extiende una
+funcionalidad.
 
-para simular operaciones asíncronas cuando ya existe acceso real a datos.
+Liskov Substitution:
+las implementaciones deben respetar los contratos definidos por sus
+abstracciones.
 
+Interface Segregation:
+evitar interfaces excesivamente grandes.
 
-# 19. SOLID
-
-Mantener responsabilidades separadas.
-
-Controller:
-coordina solicitudes y respuestas.
-
-Service:
-reglas de negocio.
-
-Repository:
-acceso a datos.
-
-DbContext:
-persistencia mediante Entity Framework Core.
-
-DTO:
-transferencia de información.
-
-ViewModel:
-información específica necesaria por una View.
-
-Aplicar inyección de dependencias para depender de interfaces en lugar
-de implementaciones concretas cuando corresponda.
+Dependency Inversion:
+preferir dependencias mediante abstracciones cuando aporten desacoplamiento real.
 
 
-# 20. Patrones utilizados
+# 22. Patrones
 
-Mantener y documentar los patrones utilizados:
+Utilizar y documentar solamente patrones realmente presentes en el proyecto.
+
+Patrones esperados de forma natural:
 
 Repository Pattern:
-en DAL para abstraer el acceso a datos.
+abstracción del acceso a datos.
 
 Service Layer:
-en BLL para concentrar reglas de negocio.
+centralización de reglas de negocio.
 
 Dependency Injection:
-para desacoplar servicios y repositorios.
+resolución y desacoplamiento de dependencias.
 
 DTO:
-para transferir información entre capas.
+transferencia controlada de información.
 
 MVC:
-para separar interfaz, control y presentación.
+separación entre presentación, control y modelo de interfaz.
 
-Estos patrones deberán documentarse posteriormente en README.md.
+No agregar patrones únicamente para aumentar la complejidad del proyecto.
 
 
-# 21. Diseño visual
+# 23. Paquetes y dependencias
 
-El diseño principal debe ser oscuro e inspirado en plataformas modernas
-de streaming.
+Mantener las dependencias compatibles con el framework utilizado por la
+solución.
+
+Los paquetes pertenecientes a una misma familia tecnológica deben mantener
+versiones compatibles entre sí.
+
+Evitar mezclar versiones mayores incompatibles.
+
+No actualizar dependencias automáticamente solo porque exista una versión más
+reciente.
+
+Antes de actualizar:
+
+1. revisar compatibilidad;
+2. realizar el cambio;
+3. restaurar dependencias;
+4. recompilar;
+5. probar el módulo afectado.
+
+Revisar advertencias de vulnerabilidad antes de la entrega final.
+
+
+# 24. Diseño visual
+
+El diseño principal debe utilizar un tema oscuro inspirado en plataformas
+modernas de streaming.
 
 Mantener:
 
 - navegación clara;
+- jerarquía visual;
 - tarjetas de películas;
-- posters;
-- responsive design;
+- pósteres;
+- diseño responsive;
 - reproductor prominente;
 - mini-reproductor persistente.
 
-No copiar código o diseños completos de plataformas existentes.
+Las plataformas comerciales sirven únicamente como referencia visual y de
+experiencia.
 
-Tomarlas únicamente como referencia visual.
-
-
-# 22. Control de versiones
-
-Utilizar un .gitignore apropiado.
-
-No subir:
-
-bin/
-obj/
-.vs/
-bases de datos locales cuando no correspondan;
-secretos;
-credenciales.
-
-Realizar commits pequeños con mensajes claros.
-
-No modificar módulos no relacionados con la tarea solicitada.
+No copiar código, interfaces completas ni recursos protegidos de terceros.
 
 
-# 23. Cambios realizados por asistentes de código
+# 25. Control de versiones
+
+Mantener un .gitignore apropiado.
+
+No versionar:
+
+- binarios generados;
+- carpetas temporales;
+- archivos del entorno de desarrollo;
+- secretos;
+- credenciales;
+- configuraciones privadas;
+- archivos locales que no correspondan al proyecto.
+
+Las bases de datos locales deben versionarse únicamente si existe una decisión
+explícita del equipo para hacerlo.
+
+Realizar commits pequeños y con mensajes descriptivos.
+
+No mezclar cambios no relacionados dentro del mismo commit cuando pueda
+evitarse.
+
+
+# 26. Reglas para asistentes de código
 
 Antes de realizar cambios:
 
-1. Leer este archivo instructions.md.
-2. Revisar el módulo afectado.
-3. Modificar únicamente los archivos necesarios.
+1. Leer completamente este documento.
+2. Revisar el módulo y arquitectura afectados.
+3. Modificar únicamente lo necesario para la tarea actual.
 4. No reestructurar otros módulos sin autorización.
-5. No crear funcionalidades fuera del enunciado.
-6. No duplicar entidades, DTOs, servicios o repositorios existentes.
-7. Mantener la arquitectura MVC -> BLL -> DAL.
-8. Compilar la solución después de cada etapa.
-9. Informar exactamente:
-   - archivos creados;
-   - archivos modificados;
-   - motivo de cada cambio;
-   - resultado de compilación.
-10. No generar ni aplicar migraciones sin autorización cuando el cambio
-    altere la base de datos.
-11. Toda nueva entidad creada dentro de DAL/Entidades debe declararse como public y respetar las reglas de navegación y accesibilidad definidas en este documento.
+5. No duplicar responsabilidades existentes.
+6. Mantener la separación por capas.
+7. Mantener las convenciones existentes.
+8. Utilizar código asíncrono cuando corresponda.
+9. Respetar las reglas de seguridad.
+10. No generar ni aplicar migraciones sin autorización cuando cambien el
+    esquema.
+11. Compilar después de cambios importantes.
+12. Informar qué fue creado o modificado y por qué.
+
+Antes de crear una funcionalidad que no exista actualmente:
+
+1. Compararla con los requerimientos principales definidos al final de este
+   documento.
+2. Determinar si forma parte del enunciado.
+3. Si no forma parte del enunciado ni es técnicamente necesaria para cumplirlo,
+   detenerse e informar que la propuesta se encuentra fuera del alcance.
+4. No implementarla sin autorización.
+
+Este documento no debe utilizarse para almacenar errores puntuales, commits,
+resultados de compilaciones o soluciones temporales.
 
 
-# 24. Regla principal de desarrollo
+# 27. Método de desarrollo
 
-Trabajar módulo por módulo  
+Trabajar módulo por módulo.
 
-No implementar varias funcionalidades grandes simultáneamente.
+No implementar simultáneamente múltiples funcionalidades grandes cuando puedan
+desarrollarse y probarse por separado.
 
 Orden recomendado:
 
-1. Base de datos y entidades.
-2. Login.
-3. Catálogo.
-4. Detalle de película.
-5. Perfiles de personas.
-6. WatchLists.
-7. Calificaciones y reseñas.
-8. Reproducción.
-9. Mini-reproductor.
-10. Interacciones visuales.
-11. Responsive.
-12. Pruebas finales.
-13. README.
+1. modelo de datos;
+2. autenticación;
+3. catálogo;
+4. detalle de contenido;
+5. perfiles relacionados;
+6. listas personalizadas;
+7. calificaciones y reseñas;
+8. reproducción;
+9. reproductor persistente;
+10. interacción visual;
+11. responsive;
+12. pruebas finales;
+13. documentación.
 
 Cada módulo debe compilar y probarse antes de continuar con el siguiente.
 
 
-# 25. Restricciones e integridad de base de datos
+# 28. Documentación final
 
-Las reglas estructurales importantes deben existir también a nivel de
-base de datos y no depender únicamente de validaciones de la interfaz.
+Antes de la entrega debe existir un README.
 
-Configurar mediante Fluent API cuando corresponda:
+Debe documentar como mínimo:
 
-- campos obligatorios;
-- longitudes máximas;
-- índices únicos;
-- relaciones;
-- claves compuestas;
-- comportamiento de eliminación.
+- integrantes finales;
+- repositorio público;
+- arquitectura utilizada;
+- tipos de proyectos presentes en la solución;
+- dependencias y paquetes utilizados;
+- principios SOLID realmente aplicados;
+- patrones de diseño realmente utilizados;
+- decisiones principales de base de datos;
+- instrucciones básicas de ejecución.
 
-Ejemplos:
-
-Usuario:
-- NombreUsuario obligatorio y único.
-- Correo obligatorio y único.
-- PasswordHash obligatorio.
-
-Genero:
-- Nombre obligatorio y único.
-
-WatchList:
-- Nombre obligatorio.
-- combinación IdUsuario + Nombre única.
-
-Calificacion:
-- combinación IdUsuario + IdPelicula única.
-
-Reproduccion:
-- combinación IdUsuario + IdPelicula única.
-
-PeliculaGenero:
-- clave compuesta IdPelicula + IdGenero.
-
-PeliculaActor:
-- clave compuesta IdPelicula + IdActor.
-
-WatchListPelicula:
-- clave compuesta IdWatchList + IdPelicula.
+No documentar tecnologías o patrones que no se encuentren realmente
+implementados.
 
 
-# 26. Accesibilidad de entidades y propiedades de navegación
+# -----------------------------------------------------------------------
 
-Reglas obligatorias:
+# 29. Requerimientos principales del proyecto
 
-- Todas las entidades persistentes ubicadas en
-  G3_Proyecto_CineStreamCR.DAL/Entidades
-  deben declararse como public.
+Esta sección representa el alcance funcional esperado según el enunciado oficial.
 
-- No utilizar internal class ni clases sin modificador de acceso para
-  entidades administradas por Entity Framework Core.
+Debe utilizarse como referencia antes de implementar nuevas funcionalidades.
 
-- Las propiedades de navegación públicas no deben exponer tipos con
-  menor nivel de accesibilidad.
+Si una propuesta no está relacionada con alguno de estos requerimientos y no es
+técnicamente necesaria para cumplirlos, debe considerarse fuera del alcance y
+no debe implementarse sin autorización.
 
-- Las colecciones de navegación deben mantenerse públicas e inicializadas,
-  por ejemplo:
 
-  public ICollection<PeliculaActor> PeliculaActores { get; set; }
-      = new List<PeliculaActor>();
+## 29.1 Login
 
-- No solucionar errores de accesibilidad reduciendo arbitrariamente
-  la visibilidad de propiedades de navegación.
+El sistema debe permitir:
 
-- Si aparece un error CS0053 "Incoherencia de accesibilidad", revisar primero
-  que la entidad utilizada por la propiedad pública también esté declarada
-  como public.
+- inicio de sesión mediante email o username y contraseña;
+- validación de campos en cliente;
+- validación de campos en servidor;
+- redirección al catálogo después de autenticación correcta;
+- mensajes descriptivos cuando el usuario no exista;
+- mensajes descriptivos cuando la contraseña sea incorrecta.
 
-- Esta regla debe aplicarse tanto a las entidades actuales como a cualquier
-  entidad nueva agregada posteriormente.
 
-Entidades actuales que deben respetar esta regla:
+## 29.2 Catálogo de películas
 
-Usuario
-Persona
-Genero
-Pelicula
-PeliculaGenero
-PeliculaActor
-WatchList
-WatchListPelicula
-Calificacion
-Reproduccion
+Debe existir un catálogo principal.
 
-# 27. Consultas del catálogo
+Debe incluir:
 
-La búsqueda, filtros, ordenamiento y paginación deben realizarse
-preferiblemente en la consulta de base de datos y no después de cargar
-todas las películas en memoria.
-
-Construir la consulta mediante IQueryable y ejecutar ToListAsync()
-únicamente después de aplicar:
-
-- búsqueda por título;
-- género;
+- listado paginado;
+- póster;
+- título;
 - año;
-- ordenamiento;
-- Skip();
-- Take().
+- duración;
+- calificación.
 
-Evitar traer toda la tabla con ToListAsync() para posteriormente filtrar
-con LINQ en memoria.
+Debe permitir:
+
+- búsqueda en tiempo real por título;
+- filtro por género;
+- filtro por año de estreno;
+- ordenamiento por título;
+- ordenamiento por año;
+- ordenamiento por calificación;
+- orden ascendente;
+- orden descendente;
+- acceso al detalle desde la tarjeta de película;
+- agregar películas a listas personalizadas;
+- mostrar visualmente cuando una película ya pertenezca a alguna lista.
 
 
-# 28. Sesión y autenticación
+## 29.3 Detalle de película
 
-La autenticación debe centralizarse en el módulo de usuarios.
+Debe mostrar:
 
-Después de un login correcto, almacenar en sesión únicamente los datos
-mínimos necesarios para identificar al usuario.
+- póster;
+- título;
+- sinopsis;
+- duración;
+- año;
+- géneros;
+- rating;
+- director;
+- foto del director;
+- elenco principal.
 
-No almacenar contraseñas ni PasswordHash en Session, cookies, ViewBag,
-ViewData ni TempData.
+Debe permitir:
 
-Las operaciones asociadas al usuario, como WatchLists, calificaciones y
-progreso de reproducción, deben obtener el IdUsuario desde la sesión
-autenticada y no confiar en un IdUsuario enviado manualmente desde una View.
+- acceder al perfil del director;
+- acceder al perfil de los actores;
+- agregar la película a una lista;
+- quitarla de una lista;
+- asignar una calificación de 1 a 10;
+- escribir una reseña opcional;
+- iniciar la reproducción mediante un botón visible.
+
+
+## 29.4 Directores y actores
+
+Cada película debe estar relacionada con:
+
+- un director;
+- elenco principal.
+
+Los perfiles deben mostrar:
+
+- foto;
+- nombre;
+- nacionalidad;
+- biografía;
+- fecha de nacimiento.
+
+El perfil de director debe mostrar las películas dirigidas.
+
+El perfil de actor debe mostrar:
+
+- películas en las que participó;
+- personaje interpretado.
+
+
+## 29.5 WatchLists
+
+El usuario debe poder:
+
+- crear listas personalizadas;
+- indicar nombre;
+- indicar descripción;
+- editar nombre;
+- editar descripción;
+- eliminar una lista con confirmación;
+- agregar películas;
+- quitar películas;
+- agregar una película a varias listas;
+- consultar las películas de cada lista.
+
+
+## 29.6 Calificaciones y reseñas
+
+El usuario debe poder:
+
+- calificar películas entre 1 y 10;
+- escribir una reseña opcional.
+
+La aplicación debe evitar registros duplicados innecesarios para una misma
+interacción de usuario y película.
+
+
+## 29.7 Reproducción de películas
+
+Debe existir un reproductor de video embebido.
+
+Debe incluir:
+
+- Play;
+- Pause;
+- avanzar;
+- retroceder;
+- barra de progreso interactiva;
+- control de volumen;
+- película anterior;
+- película siguiente.
+
+La reproducción debe mantenerse mientras el usuario navega dentro de la
+aplicación.
+
+
+## 29.8 Mini-reproductor persistente
+
+Mientras exista reproducción activa debe mostrarse un mini-reproductor
+persistente.
+
+Debe incluir como mínimo:
+
+- título de la película;
+- póster o miniatura;
+- controles básicos.
+
+Debe permitir continuar la reproducción sin reiniciarla innecesariamente al
+cambiar de sección.
+
+
+## 29.9 Interacción con el usuario
+
+La aplicación debe proporcionar una experiencia fluida.
+
+Debe incluir:
+
+- notificaciones visuales o toasts;
+- mensajes ante errores de autenticación;
+- notificación al agregar contenido a listas;
+- notificación al calificar;
+- indicador de carga durante operaciones asíncronas cuando corresponda.
+
+
+## 29.10 Diseño y experiencia
+
+La interfaz debe:
+
+- utilizar un tema oscuro;
+- inspirarse visualmente en plataformas de streaming existentes;
+- funcionar correctamente en escritorio;
+- adaptarse a dispositivos móviles;
+- mantener una navegación clara;
+- dar especial importancia visual al contenido audiovisual y al reproductor.
+
+
+## 29.11 Regla de control de alcance
+
+Antes de crear cualquier funcionalidad nueva, comparar la solicitud con esta
+sección.
+
+Clasificar la nueva funcionalidad como:
+
+REQUERIDA:
+aparece directamente en el enunciado.
+
+DE APOYO:
+no aparece literalmente, pero es técnicamente necesaria para implementar un
+requerimiento.
+
+FUERA DE ALCANCE:
+no aparece en el enunciado y no es necesaria para cumplir ningún requerimiento.
+
+Las funcionalidades clasificadas como FUERA DE ALCANCE no deben implementarse
+sin autorización explícita.
+
+Ejemplos de funcionalidades fuera del alcance salvo autorización:
+
+- pagos;
+- suscripciones;
+- planes premium;
+- recomendaciones mediante inteligencia artificial;
+- chat;
+- red social;
+- perfiles infantiles;
+- descarga offline;
+- sistemas de anuncios;
+- funcionalidades administrativas no solicitadas.
+
+# -----------------------------------------------------------------------
