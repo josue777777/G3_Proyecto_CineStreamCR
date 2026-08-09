@@ -8,6 +8,16 @@ namespace G3_Proyecto_CineStreamCR.Controllers
     {
         public IActionResult Index()
         {
+            var idUsuario =
+                HttpContext.Session.GetInt32("IdUsuario");
+
+            if (idUsuario == null)
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Auth");
+            }
+
             return View();
         }
 
@@ -16,10 +26,18 @@ namespace G3_Proyecto_CineStreamCR.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(
+            Duration = 0,
+            Location = ResponseCacheLocation.None,
+            NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel
+            {
+                RequestId =
+                    Activity.Current?.Id ??
+                    HttpContext.TraceIdentifier
+            });
         }
     }
 }

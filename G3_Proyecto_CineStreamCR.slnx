@@ -3,12 +3,18 @@
     <File Path="instructions.md" />
   </Folder>
   <Folder Name="/.github/agents/" />
-  <Project Path="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj">
-    <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
-  </Project>
-  <Project Path="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
-  <Project Path="G3_Proyecto_CineStreamCR/G3_Proyecto_CineStreamCR.csproj">
-    <BuildDependency Project="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj" />
-    <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
-  </Project>
+  <Folder Name="/Capa de Datos → DAL/">
+    <Project Path="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+  </Folder>
+  <Folder Name="/Capa de Negocio → BLL/">
+    <Project Path="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj">
+      <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/Capa de Presentación → MVC/">
+    <Project Path="G3_Proyecto_CineStreamCR/G3_Proyecto_CineStreamCR.csproj">
+      <BuildDependency Project="G3_Proyecto_CineStreamCR.BLL/G3_Proyecto_CineStreamCR.BLL.csproj" />
+      <BuildDependency Project="G3_Proyecto_CineStreamCR.DAL/G3_Proyecto_CineStreamCR.DAL.csproj" />
+    </Project>
+  </Folder>
 </Solution>

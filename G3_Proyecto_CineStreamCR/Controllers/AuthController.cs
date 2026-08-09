@@ -18,12 +18,25 @@ namespace G3_Proyecto_CineStreamCR.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            var idUsuario =
+                HttpContext.Session.GetInt32("IdUsuario");
+
+            // Si ya existe una sesión activa,
+            // no vuelve a mostrar el Login.
+            if (idUsuario != null)
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Home");
+            }
+
             return View();
         }
 
         // Procesa el inicio de sesión.
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(
+            LoginViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -46,12 +59,30 @@ namespace G3_Proyecto_CineStreamCR.Controllers
                 return View(model);
             }
 
-            // La sesión se configurará en el siguiente paso.
-            // Por ahora solamente confirmamos que la autenticación funciona.
+            // Guarda únicamente la información básica
+            // necesaria para identificar al usuario.
+            HttpContext.Session.SetInt32(
+                "IdUsuario",
+                resultado.Usuario!.IdUsuario);
+
+            HttpContext.Session.SetString(
+                "NombreUsuario",
+                resultado.Usuario.NombreUsuario);
 
             return RedirectToAction(
                 "Index",
                 "Home");
+        }
+
+        // Cierra la sesión del usuario actual.
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction(
+                "Login",
+                "Auth");
         }
     }
 }

@@ -2,6 +2,7 @@ using G3_Proyecto_CineStreamCR.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using G3_Proyecto_CineStreamCR.BLL.Services.Usuario;
 using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
+using G3_Proyecto_CineStreamCR.Data;
 
 // Program.cs
 // Punto de entrada principal de la aplicación.
@@ -9,13 +10,22 @@ using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // ====================== SERVICIOS ======================
 
 // Agrega soporte para MVC:
 // Controllers + Views.
 builder.Services.AddControllersWithViews();
 
+// ====================== SESIÓN ======================
+
+// Permite mantener información básica del usuario
+// mientras navega por la aplicación.
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // ====================== BASE DE DATOS ======================
 
@@ -36,15 +46,29 @@ builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 // Servicio de lógica de negocio para autenticación y usuarios.
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 
-
-
 // Los repositorios y servicios BLL se registrarán posteriormente
 // conforme se implemente cada módulo.
-
 
 // ====================== CONSTRUCCIÓN DE LA APP ======================
 
 var app = builder.Build();
+
+// ====================== INICIALIZACIÓN DE BASE DE DATOS ======================
+
+// ====================== DATOS INICIALES ======================
+
+// En desarrollo crea los datos mínimos necesarios
+// para poder probar la aplicación.
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+
+    var context =
+        scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
+
+    await InicializadorDatos.InicializarAsync(context);
+}
 
 
 // ====================== PIPELINE HTTP ======================
@@ -58,33 +82,31 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
 // Redirección HTTP -> HTTPS.
 app.UseHttpsRedirection();
-
 
 // Habilita enrutamiento.
 app.UseRouting();
 
+// Habilita el uso de sesión antes de procesar
+// la autorización y los controladores.
+app.UseSession();
 
 // Habilita autorización.
-// La autenticación y sesión se configurarán cuando se implemente Login.
+// La autenticación se completará conforme avance el módulo de Login.
 app.UseAuthorization();
-
 
 // ====================== ARCHIVOS ESTÁTICOS ======================
 
 // Permite servir CSS, JavaScript, imágenes y otros recursos.
 app.MapStaticAssets();
 
-
 // ====================== RUTA POR DEFECTO ======================
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Auth}/{action=Login}/{id?}")
     .WithStaticAssets();
-
 
 // ====================== EJECUCIÓN ======================
 
