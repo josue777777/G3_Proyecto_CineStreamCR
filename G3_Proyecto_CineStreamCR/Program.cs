@@ -83,14 +83,13 @@ app.UseAuthorization();
 // ====================== ARCHIVOS ESTÁTICOS ======================
 
 // Permite servir CSS, JavaScript, imágenes y otros recursos.
-app.MapStaticAssets();
-
+app.UseStaticFiles();
 // ====================== RUTA POR DEFECTO ======================
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Auth}/{action=Login}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 // ====================== EJECUCIÓN ======================
 
