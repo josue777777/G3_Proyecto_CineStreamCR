@@ -43,6 +43,12 @@ else
                     <p class="movie-synopsis">@pelicula.Sinopsis</p>
                     <div class="movie-footer-actions">
                         <a href="/Peliculas/Detalle/@pelicula.IdPelicula" class="btn-detail">Detalles</a>
+                        <a asp-controller="WatchLists"
+                           asp-action="Seleccionar"
+                           asp-route-idPelicula="@pelicula.IdPelicula"
+                           class="btn-lists-card">
+                            Listas
+                        </a>
                         <a href="/Reproductor/Ver/@pelicula.IdPelicula" class="btn-play-card">▶ Ver</a>
                     </div>
                 </div>

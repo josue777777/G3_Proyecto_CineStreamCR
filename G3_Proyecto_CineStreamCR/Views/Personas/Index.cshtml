@@ -1,0 +1,63 @@
+@model List<G3_Proyecto_CineStreamCR.BLL.Dtos.Personas.PersonaResumenDto>
+@{
+    ViewData["Title"] = "Directores y actores";
+}
+
+<section class="people-page">
+    <div class="content-page-header">
+        <div>
+            <span class="content-eyebrow">CineStream CR</span>
+            <h1>Directores y actores</h1>
+            <p>Conoce a las personas detrás de las películas disponibles.</p>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="people-grid">
+            @foreach (var persona in Model)
+            {
+                <a asp-controller="Personas"
+                   asp-action="Detalle"
+                   asp-route-id="@persona.IdPersona"
+                   class="people-card">
+                    <div class="people-card-photo">
+                        <span>@persona.Nombre[..1].ToUpper()</span>
+                        @if (!string.IsNullOrWhiteSpace(persona.FotoUrl))
+                        {
+                            <img src="@persona.FotoUrl"
+                                 alt="Foto de @persona.Nombre"
+                                 onerror="this.style.display='none'" />
+                        }
+                    </div>
+
+                    <div class="people-card-body">
+                        <h2>@persona.Nombre</h2>
+
+                        @if (!string.IsNullOrWhiteSpace(persona.Nacionalidad))
+                        {
+                            <p>@persona.Nacionalidad</p>
+                        }
+
+                        <div class="people-roles">
+                            @if (persona.EsDirector)
+                            {
+                                <span>Director</span>
+                            }
+                            @if (persona.EsActor)
+                            {
+                                <span>Actor</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-content-card">
+            Todavía no hay personas registradas.
+        </div>
+    }
+</section>

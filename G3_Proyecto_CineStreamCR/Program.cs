@@ -65,11 +65,11 @@ builder.Services.AddScoped<IReproduccionService, ReproduccionService>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
 builder.Services.AddScoped<IPeliculaService, PeliculaService>();
 
-// Integración mínima de WatchList reutilizada por el catálogo y el detalle.
+// Gestión de listas e integración con el catálogo y el detalle.
 builder.Services.AddScoped<IWatchListRepositorio, WatchListRepositorio>();
 builder.Services.AddScoped<IWatchListService, WatchListService>();
 
-// Perfil público de personas (director/actor), usado desde el detalle.
+// Perfiles públicos de directores y actores.
 builder.Services.AddScoped<IPersonaRepositorio, PersonaRepositorio>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
 

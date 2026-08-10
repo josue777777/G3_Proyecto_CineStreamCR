@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Perfil de Christopher Nolan">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5f2ca7"/>
+      <stop offset="0.55" stop-color="#181226"/>
+      <stop offset="1" stop-color="#08070d"/>
+    </linearGradient>
+    <radialGradient id="light" cx="50%" cy="28%" r="48%">
+      <stop offset="0" stop-color="#c49aff" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#7b42d1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg)"/>
+  <rect width="600" height="750" fill="url(#light)"/>
+  <circle cx="300" cy="285" r="112" fill="#cbc4d5" opacity=".88"/>
+  <path d="M105 750c17-191 91-287 195-287s178 96 195 287" fill="#21192f"/>
+  <text x="300" y="685" text-anchor="middle" fill="#ffffff" opacity=".86" font-family="Arial, sans-serif" font-size="72" font-weight="700">CN</text>
+</svg>

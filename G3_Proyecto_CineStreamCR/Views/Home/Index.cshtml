@@ -1,8 +1,131 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model G3_Proyecto_CineStreamCR.BLL.Dtos.Peliculas.CatalogoResultadoDto
+@{
+    ViewData["Title"] = "Inicio";
+    var peliculaDestacada = Model.Items.FirstOrDefault();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-page">
+    @if (peliculaDestacada != null)
+    {
+        <section class="home-hero"
+                 style="--home-hero-image: url('@peliculaDestacada.PosterUrl');">
+            <div class="home-hero-shade"></div>
+
+            <div class="home-hero-content">
+                <span class="home-hero-label">Estreno destacado</span>
+
+                <h1>@peliculaDestacada.Titulo</h1>
+
+                <div class="home-hero-meta">
+                    <span>@peliculaDestacada.Anio</span>
+                    <span>@peliculaDestacada.DuracionMinutos min</span>
+                    <span>
+                        Calificación @(peliculaDestacada.Rating > 0
+                            ? peliculaDestacada.Rating.ToString("0.0")
+                            : "N/A")
+                    </span>
+                </div>
+
+                <p>@peliculaDestacada.Sinopsis</p>
+
+                <div class="home-hero-actions">
+                    <a asp-controller="Reproductor"
+                       asp-action="Ver"
+                       asp-route-id="@peliculaDestacada.IdPelicula"
+                       class="home-play-button">
+                        <span>▶</span>
+                        Reproducir
+                    </a>
+
+                    <a asp-controller="Peliculas"
+                       asp-action="Detalle"
+                       asp-route-id="@peliculaDestacada.IdPelicula"
+                       class="home-secondary-button">
+                        Ver detalles
+                    </a>
+
+                    <a asp-controller="WatchLists"
+                       asp-action="Seleccionar"
+                       asp-route-idPelicula="@peliculaDestacada.IdPelicula"
+                       class="home-secondary-button">
+                        Agregar a listas
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-catalog-section">
+            <div class="home-section-header">
+                <div>
+                    <span class="content-eyebrow">Para disfrutar</span>
+                    <h2>Películas destacadas</h2>
+                </div>
+
+                <a asp-controller="Peliculas"
+                   asp-action="Index"
+                   class="home-catalog-link">
+                    Ver catálogo completo
+                </a>
+            </div>
+
+            <div class="home-movie-grid">
+                @foreach (var pelicula in Model.Items)
+                {
+                    <article class="home-movie-card">
+                        <a asp-controller="Peliculas"
+                           asp-action="Detalle"
+                           asp-route-id="@pelicula.IdPelicula"
+                           class="home-movie-poster">
+                            <img src="@pelicula.PosterUrl"
+                                 alt="Póster de @pelicula.Titulo" />
+
+                            <span class="home-movie-play">▶</span>
+                        </a>
+
+                        <div class="home-movie-content">
+                            <a asp-controller="Peliculas"
+                               asp-action="Detalle"
+                               asp-route-id="@pelicula.IdPelicula"
+                               class="home-movie-title">
+                                @pelicula.Titulo
+                            </a>
+
+                            <div class="home-movie-meta">
+                                <span>@pelicula.Anio</span>
+                                <span>@pelicula.DuracionMinutos min</span>
+                            </div>
+
+                            <div class="home-movie-actions">
+                                <a asp-controller="Reproductor"
+                                   asp-action="Ver"
+                                   asp-route-id="@pelicula.IdPelicula">
+                                    Reproducir
+                                </a>
+
+                                <a asp-controller="WatchLists"
+                                   asp-action="Seleccionar"
+                                   asp-route-idPelicula="@pelicula.IdPelicula">
+                                    Listas
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="home-empty">
+            <span class="content-eyebrow">CineStream CR</span>
+            <h1>Tu próxima historia comienza aquí</h1>
+            <p>El catálogo todavía no tiene películas disponibles.</p>
+
+            <a asp-controller="Peliculas"
+               asp-action="Index"
+               class="primary-action-button">
+                Ir al catálogo
+            </a>
+        </section>
+    }
 </div>

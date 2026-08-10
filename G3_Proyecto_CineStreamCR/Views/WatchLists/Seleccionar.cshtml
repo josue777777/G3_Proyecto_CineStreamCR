@@ -1,0 +1,56 @@
+@model G3_Proyecto_CineStreamCR.BLL.Dtos.WatchLists.WatchListSeleccionDto
+@{
+    ViewData["Title"] = "Elegir listas";
+}
+
+<section class="watchlist-form-page">
+    <a asp-controller="Peliculas"
+       asp-action="Detalle"
+       asp-route-id="@Model.IdPelicula"
+       class="back-link">
+        &larr; Volver a la película
+    </a>
+
+    <div class="watchlist-form-card selection-card">
+        <span class="content-eyebrow">Organizar película</span>
+        <h1>@Model.TituloPelicula</h1>
+        <p>Selecciona una o varias listas. También puedes desmarcarlas para quitar la película.</p>
+
+        @if (Model.Listas.Any())
+        {
+            <form asp-action="Seleccionar" method="post">
+                <input asp-for="IdPelicula" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="form-error-summary"></div>
+
+                <div class="selection-list">
+                    @for (var i = 0; i < Model.Listas.Count; i++)
+                    {
+                        <label class="selection-item">
+                            <input asp-for="Listas[i].Seleccionada" />
+                            <input asp-for="Listas[i].IdWatchList" type="hidden" />
+                            <span class="selection-check"></span>
+                            <span>@Model.Listas[i].Nombre</span>
+                        </label>
+                    }
+                </div>
+
+                <div class="form-actions">
+                    <a asp-controller="Peliculas"
+                       asp-action="Detalle"
+                       asp-route-id="@Model.IdPelicula"
+                       class="secondary-action-button">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="primary-action-button">Guardar selección</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="empty-selection">
+                <p>Primero necesitas crear una lista.</p>
+                <a asp-action="Crear" class="primary-action-button">Crear lista</a>
+            </div>
+        }
+    </div>
+</section>

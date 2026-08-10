@@ -1,15 +1,25 @@
 namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.WatchList
 {
-    // Integración mínima necesaria para que el catálogo y el detalle de
-    // película puedan agregar/quitar una película de una WatchList.
-    // La gestión completa de WatchLists (crear, renombrar, eliminar listas,
-    // listar todas las listas de un usuario) pertenece a su propio módulo.
     public interface IWatchListRepositorio
     {
-        // Obtiene (o crea si no existe) la lista rápida predeterminada del usuario.
+        Task<List<Entidades.WatchList>> ObtenerPorUsuarioAsync(int idUsuario);
+
+        Task<Entidades.WatchList?> ObtenerDetalleAsync(int idWatchList, int idUsuario);
+
+        Task<Entidades.WatchList?> ObtenerPorIdAsync(int idWatchList, int idUsuario);
+
+        Task<Entidades.Pelicula?> ObtenerPeliculaAsync(int idPelicula);
+
+        Task<bool> ExisteNombreAsync(int idUsuario, string nombre, int? idWatchListExcluir = null);
+
+        Task<bool> CrearAsync(Entidades.WatchList watchList);
+
+        Task<bool> EditarAsync(Entidades.WatchList watchList);
+
+        Task<bool> EliminarAsync(Entidades.WatchList watchList);
+
         Task<Entidades.WatchList> ObtenerOCrearListaPredeterminadaAsync(int idUsuario);
 
-        // Ids de todas las películas que el usuario ya tiene en alguna WatchList.
         Task<HashSet<int>> ObtenerIdsPeliculasAsync(int idUsuario);
 
         Task<bool> ExistePeliculaEnListaAsync(int idWatchList, int idPelicula);
@@ -17,5 +27,10 @@ namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.WatchList
         Task<bool> AgregarPeliculaAsync(int idWatchList, int idPelicula);
 
         Task<bool> QuitarPeliculaAsync(int idWatchList, int idPelicula);
+
+        Task<bool> GuardarSeleccionAsync(
+            int idUsuario,
+            int idPelicula,
+            IEnumerable<int> idsWatchLists);
     }
 }

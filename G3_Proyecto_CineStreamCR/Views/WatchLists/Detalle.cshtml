@@ -1,0 +1,87 @@
+@model G3_Proyecto_CineStreamCR.BLL.Dtos.WatchLists.WatchListDetalleDto
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<section class="watchlist-page">
+    <a asp-action="Index" class="back-link">&larr; Volver a mis listas</a>
+
+    <div class="content-page-header content-page-header-actions compact-header">
+        <div>
+            <span class="content-eyebrow">WatchList</span>
+            <h1>@Model.Nombre</h1>
+            <p>
+                @(string.IsNullOrWhiteSpace(Model.Descripcion)
+                    ? "Lista personalizada de películas."
+                    : Model.Descripcion)
+            </p>
+        </div>
+
+        <a asp-action="Editar"
+           asp-route-id="@Model.IdWatchList"
+           class="secondary-action-button">
+            Editar lista
+        </a>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="page-message">@TempData["Mensaje"]</div>
+    }
+
+    @if (Model.Peliculas.Any())
+    {
+        <div class="watchlist-movie-grid">
+            @foreach (var pelicula in Model.Peliculas)
+            {
+                <article class="watchlist-movie-card">
+                    <a asp-controller="Peliculas"
+                       asp-action="Detalle"
+                       asp-route-id="@pelicula.IdPelicula"
+                       class="watchlist-movie-poster">
+                        <img src="@pelicula.PosterUrl" alt="Póster de @pelicula.Titulo" />
+                    </a>
+
+                    <div class="watchlist-movie-info">
+                        <h2>@pelicula.Titulo</h2>
+                        <p>@pelicula.Anio · @pelicula.DuracionMinutos min</p>
+                        <span>
+                            @(pelicula.Rating > 0
+                                ? $"{pelicula.Rating:0.0} / 10"
+                                : "Sin calificación")
+                        </span>
+
+                        <div class="watchlist-movie-actions">
+                            <a asp-controller="Peliculas"
+                               asp-action="Detalle"
+                               asp-route-id="@pelicula.IdPelicula"
+                               class="secondary-action-button">
+                                Ver detalle
+                            </a>
+
+                            <form asp-action="QuitarPelicula" method="post">
+                                <input type="hidden" name="idWatchList" value="@Model.IdWatchList" />
+                                <input type="hidden" name="idPelicula" value="@pelicula.IdPelicula" />
+                                <button type="submit" class="remove-movie-button">
+                                    Quitar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-content-card">
+            <h2>Esta lista está vacía</h2>
+            <p>Explora el catálogo y elige en cuáles listas guardar cada película.</p>
+            <a asp-controller="Peliculas"
+               asp-action="Index"
+               class="primary-action-button">
+                Explorar películas
+            </a>
+        </div>
+    }
+</section>

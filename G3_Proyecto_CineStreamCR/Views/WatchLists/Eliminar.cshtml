@@ -1,0 +1,27 @@
+@model G3_Proyecto_CineStreamCR.BLL.Dtos.WatchLists.WatchListDetalleDto
+@{
+    ViewData["Title"] = "Eliminar lista";
+}
+
+<section class="watchlist-form-page">
+    <a asp-action="Index" class="back-link">&larr; Volver a mis listas</a>
+
+    <div class="watchlist-form-card delete-card">
+        <span class="content-eyebrow danger-eyebrow">Confirmación</span>
+        <h1>Eliminar @Model.Nombre</h1>
+        <p>
+            La lista y su organización se eliminarán. Las películas seguirán disponibles en el catálogo.
+        </p>
+
+        <div class="delete-summary">
+            @Model.Peliculas.Count @(Model.Peliculas.Count == 1 ? "película guardada" : "películas guardadas")
+        </div>
+
+        <form asp-action="Eliminar" asp-route-id="@Model.IdWatchList" method="post">
+            <div class="form-actions">
+                <a asp-action="Index" class="secondary-action-button">Cancelar</a>
+                <button type="submit" class="danger-action-button">Eliminar lista</button>
+            </div>
+        </form>
+    </div>
+</section>

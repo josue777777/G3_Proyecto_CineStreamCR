@@ -1,5 +1,20 @@
 namespace G3_Proyecto_CineStreamCR.BLL.Dtos.Personas
 {
+    public class PersonaResumenDto
+    {
+        public int IdPersona { get; set; }
+
+        public string Nombre { get; set; } = string.Empty;
+
+        public string? Nacionalidad { get; set; }
+
+        public string? FotoUrl { get; set; }
+
+        public bool EsDirector { get; set; }
+
+        public bool EsActor { get; set; }
+    }
+
     // Perfil público de una persona (director y/o actor) junto con
     // su filmografía dentro de la plataforma.
     public class PersonaDetalleDto

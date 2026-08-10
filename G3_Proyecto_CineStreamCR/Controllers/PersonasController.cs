@@ -14,9 +14,16 @@ namespace G3_Proyecto_CineStreamCR.Controllers
             _personaService = personaService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var idUsuario = HttpContext.Session.GetInt32("IdUsuario");
+            if (idUsuario == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var personas = await _personaService.ObtenerTodasAsync();
+            return View(personas);
         }
 
         // Perfil público de una persona (director o actor), enlazado

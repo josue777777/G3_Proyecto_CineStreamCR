@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Perfil de Timothée Chalamet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9f53ff"/>
+      <stop offset="0.56" stop-color="#211431"/>
+      <stop offset="1" stop-color="#07050b"/>
+    </linearGradient>
+    <radialGradient id="light" cx="52%" cy="24%" r="50%">
+      <stop offset="0" stop-color="#ead9ff" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#aa67ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg)"/>
+  <rect width="600" height="750" fill="url(#light)"/>
+  <circle cx="300" cy="285" r="112" fill="#d6cfdf" opacity=".9"/>
+  <path d="M105 750c17-191 91-287 195-287s178 96 195 287" fill="#2b1b3e"/>
+  <text x="300" y="685" text-anchor="middle" fill="#ffffff" opacity=".88" font-family="Arial, sans-serif" font-size="72" font-weight="700">TC</text>
+</svg>

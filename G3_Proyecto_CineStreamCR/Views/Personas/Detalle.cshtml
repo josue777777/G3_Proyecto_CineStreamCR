@@ -38,17 +38,31 @@
     }
 
     .persona-photo-wrapper {
+        position: relative;
         flex: 0 0 220px;
+        aspect-ratio: 2 / 3;
     }
 
     .persona-photo {
+        position: absolute;
+        inset: 0;
         width: 100%;
-        aspect-ratio: 2 / 3;
+        height: 100%;
         object-fit: cover;
         border-radius: 16px;
         border: 1px solid var(--hbo-purple);
         box-shadow: 0 0 25px rgba(159, 83, 255, 0.3);
         background: rgba(255, 255, 255, 0.04);
+    }
+
+    .persona-photo-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.72);
+        background: linear-gradient(145deg, #421c78, #151020 65%, #09070f);
     }
 
     .persona-info {
@@ -153,13 +167,15 @@
 
     <div class="persona-banner">
         <div class="persona-photo-wrapper">
+            <div class="persona-photo persona-photo-placeholder">
+                @Model.Nombre[..1].ToUpper()
+            </div>
             @if (!string.IsNullOrWhiteSpace(Model.FotoUrl))
             {
-                <img class="persona-photo" src="@Model.FotoUrl" alt="Foto de @Model.Nombre" />
-            }
-            else
-            {
-                <div class="persona-photo d-flex align-items-center justify-content-center text-white-50">Sin foto</div>
+                <img class="persona-photo"
+                     src="@Model.FotoUrl"
+                     alt="Foto de @Model.Nombre"
+                     onerror="this.style.display='none'" />
             }
         </div>
         <div class="persona-info">
@@ -167,11 +183,11 @@
             <div class="persona-meta">
                 @if (!string.IsNullOrWhiteSpace(Model.Nacionalidad))
                 {
-                    <span>🌎 @Model.Nacionalidad</span>
+                    <span>@Model.Nacionalidad</span>
                 }
                 @if (Model.FechaNacimiento.HasValue)
                 {
-                    <span>🎂 @Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")</span>
+                    <span>Nacimiento: @Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")</span>
                 }
             </div>
             @if (!string.IsNullOrWhiteSpace(Model.Biografia))

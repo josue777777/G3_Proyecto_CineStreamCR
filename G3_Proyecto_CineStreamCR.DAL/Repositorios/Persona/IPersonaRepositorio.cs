@@ -6,6 +6,8 @@ namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.Persona
     // a su propio módulo.
     public interface IPersonaRepositorio
     {
+        Task<List<Entidades.Persona>> ObtenerTodasAsync();
+
         Task<Entidades.Persona?> ObtenerDetalleAsync(int idPersona);
     }
 }

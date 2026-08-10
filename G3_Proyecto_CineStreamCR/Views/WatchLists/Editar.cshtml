@@ -1,0 +1,40 @@
+@model G3_Proyecto_CineStreamCR.BLL.Dtos.WatchLists.WatchListFormDto
+@{
+    ViewData["Title"] = "Editar lista";
+}
+
+<section class="watchlist-form-page">
+    <a asp-action="Index" class="back-link">&larr; Volver a mis listas</a>
+
+    <div class="watchlist-form-card">
+        <span class="content-eyebrow">WatchList</span>
+        <h1>Editar lista</h1>
+        <p>Actualiza el nombre o la descripción de tu lista.</p>
+
+        <form asp-action="Editar" asp-route-id="@Model.IdWatchList" method="post">
+            <input asp-for="IdWatchList" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="form-error-summary"></div>
+
+            <div class="watchlist-form-field">
+                <label asp-for="Nombre">Nombre</label>
+                <input asp-for="Nombre" maxlength="100" autocomplete="off" />
+                <span asp-validation-for="Nombre"></span>
+            </div>
+
+            <div class="watchlist-form-field">
+                <label asp-for="Descripcion">Descripción</label>
+                <textarea asp-for="Descripcion" rows="4" maxlength="500"></textarea>
+                <span asp-validation-for="Descripcion"></span>
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="Index" class="secondary-action-button">Cancelar</a>
+                <button type="submit" class="primary-action-button">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

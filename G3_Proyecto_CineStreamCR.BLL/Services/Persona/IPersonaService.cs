@@ -6,6 +6,8 @@ namespace G3_Proyecto_CineStreamCR.BLL.Services.Persona
     // necesaria para la navegación desde el detalle de película.
     public interface IPersonaService
     {
+        Task<List<PersonaResumenDto>> ObtenerTodasAsync();
+
         Task<PersonaDetalleDto?> ObtenerDetalleAsync(int idPersona);
     }
 }

@@ -12,6 +12,15 @@ namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.Persona
             _context = context;
         }
 
+        public async Task<List<Entidades.Persona>> ObtenerTodasAsync()
+        {
+            return await _context.Personas
+                .AsNoTracking()
+                .Include(p => p.PeliculasDirigidas)
+                .Include(p => p.PeliculasComoActor)
+                .ToListAsync();
+        }
+
         public async Task<Entidades.Persona?> ObtenerDetalleAsync(int idPersona)
         {
             return await _context.Personas

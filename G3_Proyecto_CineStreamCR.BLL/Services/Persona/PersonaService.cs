@@ -12,6 +12,23 @@ namespace G3_Proyecto_CineStreamCR.BLL.Services.Persona
             _personaRepositorio = personaRepositorio;
         }
 
+        public async Task<List<PersonaResumenDto>> ObtenerTodasAsync()
+        {
+            var personas = await _personaRepositorio.ObtenerTodasAsync();
+
+            return personas.Select(persona => new PersonaResumenDto
+            {
+                IdPersona = persona.IdPersona,
+                Nombre = persona.Nombre,
+                Nacionalidad = persona.Nacionalidad,
+                FotoUrl = persona.FotoUrl,
+                EsDirector = persona.PeliculasDirigidas.Any(),
+                EsActor = persona.PeliculasComoActor.Any()
+            })
+            .OrderBy(persona => persona.Nombre)
+            .ToList();
+        }
+
         public async Task<PersonaDetalleDto?> ObtenerDetalleAsync(int idPersona)
         {
             var persona = await _personaRepositorio.ObtenerDetalleAsync(idPersona);

@@ -6,6 +6,14 @@
         !string.IsNullOrWhiteSpace(nombreUsuario)
             ? nombreUsuario[..1].ToUpper()
             : "U";
+
+    var controladorActual =
+        ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+
+    var inicioActivo = controladorActual == "Home";
+    var peliculasActivo = controladorActual == "Peliculas";
+    var listasActivo = controladorActual == "WatchLists";
+    var personasActivo = controladorActual == "Personas";
 }
 
 <!DOCTYPE html>
@@ -54,21 +62,21 @@
 
                 <a asp-controller="Home"
                    asp-action="Index"
-                   class="header-nav-link">
+                   class="header-nav-link @(inicioActivo ? "active" : "")">
                     Inicio
                 </a>
 
                 <a asp-controller="Peliculas"
                    asp-action="Index"
-                   class="header-nav-link">
+                   class="header-nav-link @(peliculasActivo ? "active" : "")">
                     Películas
                 </a>
 
-                <!--
-                Se habilitarán cuando existan sus módulos reales.
-
-                <a class="header-nav-link">Mi lista</a>
-                -->
+                <a asp-controller="WatchLists"
+                   asp-action="Index"
+                   class="header-nav-link @(listasActivo ? "active" : "")">
+                    Mis listas
+                </a>
 
             </nav>
 
@@ -158,10 +166,12 @@
         <div class="aside-items">
 
             <!-- Buscar -->
-            <button type="button"
-                    class="aside-item"
-                    title="Buscar"
-                    aria-label="Buscar">
+            <a asp-controller="Peliculas"
+               asp-action="Index"
+               asp-fragment="filtro-busqueda"
+               class="aside-item"
+               title="Buscar"
+               aria-label="Buscar">
 
                 <svg viewBox="0 0 24 24"
                      aria-hidden="true">
@@ -175,13 +185,13 @@
 
                 </svg>
 
-            </button>
+            </a>
 
 
             <!-- Inicio -->
             <a asp-controller="Home"
                asp-action="Index"
-               class="aside-item active"
+               class="aside-item @(inicioActivo ? "active" : "")"
                title="Inicio"
                aria-label="Inicio">
 
@@ -200,7 +210,7 @@
             <!-- Catálogo -->
             <a asp-controller="Peliculas"
                asp-action="Index"
-               class="aside-item"
+               class="aside-item @(peliculasActivo ? "active" : "")"
                title="Películas"
                aria-label="Películas">
 
@@ -222,10 +232,11 @@
 
 
             <!-- WatchList -->
-            <button type="button"
-                    class="aside-item"
-                    title="Mi lista"
-                    aria-label="Mi lista">
+            <a asp-controller="WatchLists"
+               asp-action="Index"
+               class="aside-item @(listasActivo ? "active" : "")"
+               title="Mis listas"
+               aria-label="Mis listas">
 
                 <svg viewBox="0 0 24 24"
                      aria-hidden="true">
@@ -234,14 +245,15 @@
 
                 </svg>
 
-            </button>
+            </a>
 
 
             <!-- Perfiles / Personas -->
-            <button type="button"
-                    class="aside-item"
-                    title="Perfiles"
-                    aria-label="Perfiles">
+            <a asp-controller="Personas"
+               asp-action="Index"
+               class="aside-item @(personasActivo ? "active" : "")"
+               title="Directores y actores"
+               aria-label="Directores y actores">
 
                 <svg viewBox="0 0 24 24"
                      aria-hidden="true">
@@ -255,7 +267,7 @@
 
                 </svg>
 
-            </button>
+            </a>
 
 
             <div class="aside-spacer"></div>

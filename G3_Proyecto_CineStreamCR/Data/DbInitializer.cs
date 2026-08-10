@@ -21,10 +21,10 @@ namespace G3_Proyecto_CineStreamCR.Data
             {
                 var personas = new List<Persona>
                 {
-                    new Persona { Nombre = "Christopher Nolan", Nacionalidad = "Británico/Estadounidense", Biografia = "Director, guionista y productor conocido por películas de gran escala y narrativa compleja.", FechaNacimiento = new DateTime(1970, 7, 30), FotoUrl = "/images/nolan.jpg" },
-                    new Persona { Nombre = "Denis Villeneuve", Nacionalidad = "Canadiense", Biografia = "Director de cine y escritor canadiense, aclamado por su trabajo en ciencia ficción y drama.", FechaNacimiento = new DateTime(1967, 10, 3), FotoUrl = "/images/villeneuve.jpg" },
-                    new Persona { Nombre = "Timothée Chalamet", Nacionalidad = "Estadounidense/Francés", Biografia = "Actor nominado al Óscar, conocido por sus papeles en Dune, Call Me by Your Name y Wonka.", FechaNacimiento = new DateTime(1995, 12, 27), FotoUrl = "/images/chalamet.jpg" },
-                    new Persona { Nombre = "Cillian Murphy", Nacionalidad = "Irlandés", Biografia = "Actor ganador del Óscar, célebre por Oppenheimer, Peaky Blinders e Inception.", FechaNacimiento = new DateTime(1976, 5, 25), FotoUrl = "/images/murphy.jpg" }
+                    new Persona { Nombre = "Christopher Nolan", Nacionalidad = "Británico/Estadounidense", Biografia = "Director, guionista y productor conocido por películas de gran escala y narrativa compleja.", FechaNacimiento = new DateTime(1970, 7, 30), FotoUrl = "/images/nolan.svg" },
+                    new Persona { Nombre = "Denis Villeneuve", Nacionalidad = "Canadiense", Biografia = "Director de cine y escritor canadiense, aclamado por su trabajo en ciencia ficción y drama.", FechaNacimiento = new DateTime(1967, 10, 3), FotoUrl = "/images/villeneuve.svg" },
+                    new Persona { Nombre = "Timothée Chalamet", Nacionalidad = "Estadounidense/Francés", Biografia = "Actor nominado al Óscar, conocido por sus papeles en Dune, Call Me by Your Name y Wonka.", FechaNacimiento = new DateTime(1995, 12, 27), FotoUrl = "/images/chalamet.svg" },
+                    new Persona { Nombre = "Cillian Murphy", Nacionalidad = "Irlandés", Biografia = "Actor ganador del Óscar, célebre por Oppenheimer, Peaky Blinders e Inception.", FechaNacimiento = new DateTime(1976, 5, 25), FotoUrl = "/images/murphy.svg" }
                 };
 
                 await context.Personas.AddRangeAsync(personas);

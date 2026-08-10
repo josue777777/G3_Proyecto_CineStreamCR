@@ -1,0 +1,77 @@
+@model List<G3_Proyecto_CineStreamCR.BLL.Dtos.WatchLists.WatchListResumenDto>
+@{
+    ViewData["Title"] = "Mis listas";
+}
+
+<section class="watchlist-page">
+    <div class="content-page-header content-page-header-actions">
+        <div>
+            <span class="content-eyebrow">Tu colección</span>
+            <h1>Mis listas</h1>
+            <p>Organiza las películas que quieres guardar y ver después.</p>
+        </div>
+
+        <a asp-action="Crear" class="primary-action-button">
+            Nueva lista
+        </a>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="page-message">@TempData["Mensaje"]</div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="watchlist-grid">
+            @foreach (var lista in Model)
+            {
+                <article class="watchlist-card">
+                    <div class="watchlist-card-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 4h12a2 2 0 0 1 2 2v14l-8-4-8 4V6a2 2 0 0 1 2-2z"></path>
+                        </svg>
+                    </div>
+
+                    <div class="watchlist-card-content">
+                        <h2>@lista.Nombre</h2>
+                        <p>
+                            @(string.IsNullOrWhiteSpace(lista.Descripcion)
+                                ? "Sin descripción."
+                                : lista.Descripcion)
+                        </p>
+                        <span class="watchlist-count">
+                            @lista.CantidadPeliculas @(lista.CantidadPeliculas == 1 ? "película" : "películas")
+                        </span>
+                    </div>
+
+                    <div class="watchlist-card-actions">
+                        <a asp-action="Detalle"
+                           asp-route-id="@lista.IdWatchList"
+                           class="secondary-action-button">
+                            Ver lista
+                        </a>
+                        <a asp-action="Editar"
+                           asp-route-id="@lista.IdWatchList"
+                           class="text-action-link">
+                            Editar
+                        </a>
+                        <a asp-action="Eliminar"
+                           asp-route-id="@lista.IdWatchList"
+                           class="text-action-link danger-link">
+                            Eliminar
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-content-card">
+            <h2>Aún no tienes listas</h2>
+            <p>Crea una lista para comenzar a organizar tus películas.</p>
+            <a asp-action="Crear" class="primary-action-button">Crear primera lista</a>
+        </div>
+    }
+</section>

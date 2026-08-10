@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Perfil de Denis Villeneuve">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7944e7"/>
+      <stop offset="0.58" stop-color="#151022"/>
+      <stop offset="1" stop-color="#050509"/>
+    </linearGradient>
+    <radialGradient id="light" cx="45%" cy="25%" r="52%">
+      <stop offset="0" stop-color="#dfc8ff" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#9f53ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg)"/>
+  <rect width="600" height="750" fill="url(#light)"/>
+  <circle cx="300" cy="285" r="112" fill="#d2cbd9" opacity=".88"/>
+  <path d="M105 750c17-191 91-287 195-287s178 96 195 287" fill="#251b36"/>
+  <text x="300" y="685" text-anchor="middle" fill="#ffffff" opacity=".86" font-family="Arial, sans-serif" font-size="72" font-weight="700">DV</text>
+</svg>
