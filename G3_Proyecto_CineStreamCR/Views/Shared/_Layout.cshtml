@@ -1,51 +1,365 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    var nombreUsuario =
+        Context.Session.GetString("NombreUsuario") ?? "Usuario";
+
+    var inicialUsuario =
+        !string.IsNullOrWhiteSpace(nombreUsuario)
+            ? nombreUsuario[..1].ToUpper()
+            : "U";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - G3_Proyecto_CineStreamCR</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/G3_Proyecto_CineStreamCR.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">G3_Proyecto_CineStreamCR</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - G3_Proyecto_CineStreamCR - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - CineStream CR</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body class="cinestream-body">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="cinestream-header">
+
+        <div class="cinestream-header-inner">
+
+            <!-- Logo -->
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="cinestream-logo">
+
+                <span class="logo-cine">CINE</span>
+                <span class="logo-stream">STREAM</span>
+                <span class="logo-cr">CR</span>
+
+            </a>
+
+
+            <!-- Navegación superior -->
+            <nav class="header-nav">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="header-nav-link">
+                    Inicio
+                </a>
+
+                <!--
+                Se habilitarán cuando existan sus módulos reales.
+
+                <a class="header-nav-link">Películas</a>
+                <a class="header-nav-link">Mi lista</a>
+                -->
+
+            </nav>
+
+
+            <!-- Usuario -->
+            <div class="header-user dropdown">
+
+                <button type="button"
+                        class="user-menu-button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+
+                    <span class="user-avatar">
+                        @inicialUsuario
+                    </span>
+
+                    <span class="user-name">
+                        @nombreUsuario
+                    </span>
+
+                    <span class="user-chevron">
+                        ▾
+                    </span>
+
+                </button>
+
+
+                <div class="dropdown-menu dropdown-menu-end cinestream-dropdown">
+
+                    <div class="dropdown-profile">
+
+                        <div class="dropdown-avatar">
+                            @inicialUsuario
+                        </div>
+
+                        <div class="dropdown-profile-text">
+
+                            <span>
+                                Sesión iniciada como
+                            </span>
+
+                            <strong>
+                                @nombreUsuario
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dropdown-divider"></div>
+
+
+                    <form asp-controller="Auth"
+                          asp-action="Logout"
+                          method="post">
+
+                        <button type="submit"
+                                class="logout-button">
+
+                            <span class="logout-icon">
+                                ↪
+                            </span>
+
+                            Cerrar sesión
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         ASIDE
+         ===================================================== -->
+
+    <aside class="cinestream-aside">
+
+        <div class="aside-items">
+
+            <!-- Buscar -->
+            <button type="button"
+                    class="aside-item"
+                    title="Buscar"
+                    aria-label="Buscar">
+
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="11"
+                            cy="11"
+                            r="6">
+                    </circle>
+
+                    <path d="M16 16l4 4"></path>
+
+                </svg>
+
+            </button>
+
+
+            <!-- Inicio -->
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="aside-item active"
+               title="Inicio"
+               aria-label="Inicio">
+
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M3 11.5L12 4l9 7.5"></path>
+
+                    <path d="M5.5 10.5V20h13v-9.5"></path>
+
+                </svg>
+
+            </a>
+
+
+            <!-- Catálogo -->
+            <button type="button"
+                    class="aside-item"
+                    title="Películas"
+                    aria-label="Películas">
+
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <rect x="4"
+                          y="5"
+                          width="16"
+                          height="14"
+                          rx="2">
+                    </rect>
+
+                    <path d="M8 9h8"></path>
+
+                </svg>
+
+            </button>
+
+
+            <!-- WatchList -->
+            <button type="button"
+                    class="aside-item"
+                    title="Mi lista"
+                    aria-label="Mi lista">
+
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 4l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"></path>
+
+                </svg>
+
+            </button>
+
+
+            <!-- Perfiles / Personas -->
+            <button type="button"
+                    class="aside-item"
+                    title="Perfiles"
+                    aria-label="Perfiles">
+
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12"
+                            cy="8"
+                            r="3">
+                    </circle>
+
+                    <path d="M5.5 20c.8-4 3.1-6 6.5-6s5.7 2 6.5 6"></path>
+
+                </svg>
+
+            </button>
+
+
+            <div class="aside-spacer"></div>
+
+
+            <!-- Usuario abajo -->
+            <button type="button"
+                    class="aside-item aside-profile-button"
+                    title="@nombreUsuario"
+                    aria-label="Perfil">
+
+                <span class="aside-avatar">
+                    @inicialUsuario
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENIDO
+         ===================================================== -->
+
+    <main class="cinestream-main">
+
+        @RenderBody()
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="cinestream-footer">
+
+        <div class="footer-main">
+
+            <div>
+
+                <div class="footer-logo">
+                    <span class="logo-cine">CINE</span>
+                    <span class="logo-stream">STREAM</span>
+                    <span class="logo-cr">CR</span>
+                </div>
+
+                <p>
+                    Tu espacio para descubrir y disfrutar
+                    grandes historias.
+                </p>
+
+            </div>
+
+
+            <div class="footer-meta">
+
+                <span>
+                    CineStream CR
+                </span>
+
+                <span class="footer-dot">
+                    •
+                </span>
+
+                <span>
+                    Proyecto académico
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © @DateTime.Now.Year CineStream CR
+            </span>
+
+            <span>
+                Plataforma de streaming académica
+            </span>
+
+        </div>
+
     </footer>
+
+
+
+    <!-- =====================================================
+         SCRIPTS
+         ===================================================== -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
 </body>
+
 </html>

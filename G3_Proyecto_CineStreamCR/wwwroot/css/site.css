@@ -1,31 +1,556 @@
+/* =========================================================
+   CINESTREAM CR
+   Identidad visual oscura inspirada en plataformas
+   modernas de streaming.
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+    --cs-bg: #050509;
+    --cs-bg-deep: #020204;
+    --cs-bg-soft: #0b0812;
+    --cs-surface: #12101a;
+    --cs-surface-hover: #191522;
+    --cs-purple: #7944e7;
+    --cs-purple-light: #a568ff;
+    --cs-purple-bright: #bb8bff;
+    --cs-text: #ffffff;
+    --cs-text-soft: #aaa6b2;
+    --cs-text-muted: #6f6a76;
+    --cs-border: rgba(255, 255, 255, 0.07);
+    --cs-header-height: 64px;
+    --cs-aside-width: 58px;
+}
+
+
+/* =========================================================
+   RESET / GENERAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    min-height: 100%;
+    font-size: 14px;
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: radial-gradient( circle at 65% -10%, rgba(95, 45, 183, 0.11), transparent 35% ), linear-gradient( 180deg, #07050b 0%, var(--cs-bg) 40%, var(--cs-bg-deep) 100% );
+    color: var(--cs-text);
+    overflow-x: hidden;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+a {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.cinestream-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1200;
+    height: var(--cs-header-height);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+    background: linear-gradient( 180deg, rgba(6, 5, 10, 0.98), rgba(6, 5, 10, 0.91) );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.cinestream-header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 28px 0 24px;
+    gap: 36px;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.cinestream-logo,
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    font-weight: 850;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+.cinestream-logo {
+    font-size: 18px;
+}
+
+.footer-logo {
+    font-size: 16px;
+}
+
+.logo-cine {
+    color: #ffffff;
+}
+
+.logo-stream {
+    margin-left: 6px;
+    color: var(--cs-purple-light);
+}
+
+.logo-cr {
+    margin-left: 6px;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   HEADER NAV
+   ========================================================= */
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 26px;
+}
+
+.header-nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: var(--cs-header-height);
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+    .header-nav-link:hover {
+        color: #ffffff;
+    }
+
+    .header-nav-link::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        border-radius: 4px;
+        background: linear-gradient( 90deg, #7642e8, #b67dff );
+        transform: translateX(-50%);
+        transition: width 0.22s ease;
+    }
+
+    .header-nav-link:hover::after {
+        width: 100%;
+    }
+
+
+/* =========================================================
+   USUARIO HEADER
+   ========================================================= */
+
+.header-user {
+    margin-left: auto;
+}
+
+.user-menu-button {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    padding: 5px 9px 5px 6px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+    .user-menu-button:hover,
+    .user-menu-button[aria-expanded="true"] {
+        background: rgba(255, 255, 255, 0.055);
+        border-color: rgba(255, 255, 255, 0.07);
+    }
+
+.user-avatar,
+.dropdown-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient( 135deg, #6632ce, #9f61ff );
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 0 18px rgba(124, 67, 224, 0.18);
+}
+
+.user-avatar {
+    width: 33px;
+    height: 33px;
+    font-size: 12px;
+}
+
+.user-name {
+    max-width: 130px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.85);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.user-chevron {
+    color: #77717e;
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+.user-menu-button[aria-expanded="true"]
+.user-chevron {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   DROPDOWN
+   ========================================================= */
+
+.cinestream-dropdown {
+    min-width: 250px;
+    margin-top: 9px !important;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 13px;
+    background: rgba(17, 13, 24, 0.98);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(20px);
+}
+
+.dropdown-profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px;
+}
+
+.dropdown-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.dropdown-profile-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+    .dropdown-profile-text span {
+        margin-bottom: 2px;
+        color: #77717f;
+        font-size: 10px;
+    }
+
+    .dropdown-profile-text strong {
+        overflow: hidden;
+        color: #ffffff;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+.cinestream-dropdown .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 11px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #d4cfda;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+    .logout-button:hover {
+        background: rgba(153, 91, 255, 0.10);
+        color: var(--cs-purple-bright);
+    }
+
+.logout-icon {
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   ASIDE
+   ========================================================= */
+
+.cinestream-aside {
+    position: fixed;
+    top: var(--cs-header-height);
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: var(--cs-aside-width);
+    border-right: 1px solid rgba(255, 255, 255, 0.035);
+    background: linear-gradient( 180deg, rgba(7, 6, 10, 0.98), rgba(4, 4, 7, 0.94) );
+    backdrop-filter: blur(17px);
+}
+
+.aside-items {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    padding: 22px 0 16px;
+}
+
+.aside-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+    .aside-item svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .aside-item:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.055);
+        transform: translateY(-1px);
+    }
+
+    .aside-item.active {
+        color: #ffffff;
+    }
+
+        .aside-item.active::before {
+            content: "";
+            position: absolute;
+            left: -10px;
+            width: 3px;
+            height: 19px;
+            border-radius: 0 3px 3px 0;
+            background: linear-gradient( 180deg, #8048ef, #b07bff );
+            box-shadow: 0 0 10px rgba(139, 77, 244, 0.40);
+        }
+
+.aside-spacer {
+    flex: 1;
+}
+
+.aside-profile-button {
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.aside-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient( 135deg, #6030c8, #9859f8 );
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.cinestream-main {
+    position: relative;
+    min-height: 100vh;
+    margin-left: var(--cs-aside-width);
+    padding-top: var(--cs-header-height);
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.cinestream-footer {
+    position: relative;
+    margin-left: var(--cs-aside-width);
+    padding: 42px 4.5% 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.045);
+    background: linear-gradient( 180deg, #060509, #030305 );
+}
+
+    .cinestream-footer::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        left: 50%;
+        width: 440px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(96, 47, 181, 0.075);
+        filter: blur(70px);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+.footer-main {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 35px;
+}
+
+    .footer-main p {
+        max-width: 390px;
+        margin: 10px 0 0;
+        color: var(--cs-text-muted);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+.footer-meta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #615c67;
+    font-size: 11px;
+}
+
+.footer-dot {
+    color: var(--cs-purple);
+}
+
+.footer-bottom {
+    position: relative;
+    max-width: 1400px;
+    margin: auto;
+    padding-top: 17px;
+    border-top: 1px solid rgba(255, 255, 255, 0.045);
+    display: flex;
+    justify-content: space-between;
+    color: #4f4a54;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    :root {
+        --cs-header-height: 58px;
+    }
+
+    .cinestream-header-inner {
+        padding: 0 15px;
+        gap: 15px;
+    }
+
+    .cinestream-logo {
+        font-size: 15px;
+    }
+
+    .header-nav {
+        display: none;
+    }
+
+    .user-name,
+    .user-chevron {
+        display: none;
+    }
+
+    .cinestream-aside {
+        display: none;
+    }
+
+    .cinestream-main,
+    .cinestream-footer {
+        margin-left: 0;
+    }
+
+    .footer-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-meta {
+        flex-wrap: wrap;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 5px;
+    }
 }

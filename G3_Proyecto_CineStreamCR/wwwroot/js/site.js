@@ -1,4 +1,28 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+// ESTO ES PARA EL ASIDE DE LA VISTA COMPARTIDA, PARA QUE AL DARLE CLICK A UN BOTÓN, SE PONGA ACTIVO Y LOS DEMÁS NO.
 
-// Write your JavaScript code.
+document.addEventListener("DOMContentLoaded", function () {
+
+    const asideItems =
+        document.querySelectorAll(".aside-item");
+
+    asideItems.forEach(function (item) {
+
+        item.addEventListener("click", function () {
+
+            // Solo cambia visualmente el estado activo
+            // en elementos que todavía no navegan.
+            if (item.tagName === "BUTTON") {
+
+                asideItems.forEach(function (element) {
+                    element.classList.remove("active");
+                });
+
+                item.classList.add("active");
+            }
+
+        });
+
+    });
+
+});
