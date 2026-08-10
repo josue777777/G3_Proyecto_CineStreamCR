@@ -7,5 +7,8 @@ namespace G3_Proyecto_CineStreamCR.BLL.Services.Usuario
     {
         Task<(bool Exitoso, string Mensaje, EntidadUsuario? Usuario)>
             LoginAsync(LoginDto loginDto);
+
+        Task<(bool Exitoso, string Mensaje)>
+            RegistrarAsync(RegistroDto registroDto);
     }
 }

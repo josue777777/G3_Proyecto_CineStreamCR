@@ -40,5 +40,22 @@ namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario
                 .AsNoTracking()
                 .AnyAsync(u => u.NombreUsuario == nombreUsuario);
         }
+
+
+        // Crea un nuevo usuario en la base de datos.
+        public async Task<bool> CrearUsuarioAsync(
+            Entidades.Usuario usuario)
+        {
+            if (usuario == null)
+                return false;
+
+            await _context.Usuarios.AddAsync(usuario);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
+
+
     }
 }

@@ -14,7 +14,7 @@ namespace G3_Proyecto_CineStreamCR.Controllers
             _usuarioServicio = usuarioServicio;
         }
 
-        // Muestra la pantalla de inicio de sesión.
+        // Muestra la pantalla de autenticación.
         [HttpGet]
         public IActionResult Login()
         {
@@ -22,7 +22,7 @@ namespace G3_Proyecto_CineStreamCR.Controllers
                 HttpContext.Session.GetInt32("IdUsuario");
 
             // Si ya existe una sesión activa,
-            // no vuelve a mostrar el Login.
+            // redirige al usuario al Home.
             if (idUsuario != null)
             {
                 return RedirectToAction(
@@ -30,16 +30,24 @@ namespace G3_Proyecto_CineStreamCR.Controllers
                     "Home");
             }
 
-            return View();
+            return View(new AuthViewModel());
         }
 
-        // Procesa el inicio de sesión.
+        // Procesa únicamente el formulario de inicio de sesión.
         [HttpPost]
         public async Task<IActionResult> Login(
-            LoginViewModel model)
+            [Bind(Prefix = "Login")] LoginViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                var authViewModel = new AuthViewModel
+                {
+                    Login = model,
+                    MostrarRegistro = false
+                };
+
+                return View(authViewModel);
+            }
 
             var loginDto = new LoginDto
             {
@@ -56,11 +64,17 @@ namespace G3_Proyecto_CineStreamCR.Controllers
                     string.Empty,
                     resultado.Mensaje);
 
-                return View(model);
+                var authViewModel = new AuthViewModel
+                {
+                    Login = model,
+                    MostrarRegistro = false
+                };
+
+                return View(authViewModel);
             }
 
-            // Guarda únicamente la información básica
-            // necesaria para identificar al usuario.
+            // Guarda únicamente la información necesaria
+            // para identificar al usuario autenticado.
             HttpContext.Session.SetInt32(
                 "IdUsuario",
                 resultado.Usuario!.IdUsuario);
@@ -72,6 +86,58 @@ namespace G3_Proyecto_CineStreamCR.Controllers
             return RedirectToAction(
                 "Index",
                 "Home");
+        }
+
+        // Procesa únicamente el formulario de registro.
+        [HttpPost]
+        public async Task<IActionResult> Register(
+            [Bind(Prefix = "Registro")] RegistroViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var authViewModel = new AuthViewModel
+                {
+                    Registro = model,
+                    MostrarRegistro = true
+                };
+
+                return View(
+                    "Login",
+                    authViewModel);
+            }
+
+            var registroDto = new RegistroDto
+            {
+                NombreUsuario = model.NombreUsuario,
+                Correo = model.Correo,
+                Contrasenna = model.Contrasenna
+            };
+
+            var resultado =
+                await _usuarioServicio.RegistrarAsync(
+                    registroDto);
+
+            if (!resultado.Exitoso)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    resultado.Mensaje);
+
+                var authViewModel = new AuthViewModel
+                {
+                    Registro = model,
+                    MostrarRegistro = true
+                };
+
+                return View(
+                    "Login",
+                    authViewModel);
+            }
+
+            TempData["RegistroExitoso"] =
+                "Cuenta creada correctamente. Ya puede iniciar sesión.";
+
+            return RedirectToAction(nameof(Login));
         }
 
         // Cierra la sesión del usuario actual.

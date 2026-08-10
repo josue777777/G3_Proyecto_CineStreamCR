@@ -174,3 +174,131 @@ select {
         font-size: 26px;
     }
 }
+
+/* =========================================================
+   CAMBIO ENTRE LOGIN Y REGISTRO
+   ========================================================= */
+
+.auth-flip-container {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    display: grid;
+    perspective: 1200px;
+}
+
+    .auth-flip-container .auth-card {
+        grid-area: 1 / 1;
+        width: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+        transform-style: preserve-3d;
+    }
+
+
+/* Login visible inicialmente */
+
+.auth-card-login {
+    position: relative;
+    z-index: 2;
+    transform: rotateY(0deg);
+    opacity: 1;
+}
+
+
+/* Registro oculto inicialmente */
+
+.auth-card-register {
+    position: relative;
+    z-index: 1;
+    transform: rotateY(180deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* Al activar Registro */
+
+.auth-flip-container.is-register .auth-card-login {
+    transform: rotateY(-180deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.auth-flip-container.is-register .auth-card-register {
+    transform: rotateY(0deg);
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 3;
+}
+
+
+/* =========================================================
+   CAMBIO DE FORMULARIO
+   ========================================================= */
+
+.auth-switch {
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    color: #aaa5b7;
+    font-size: 14px;
+}
+
+
+.auth-switch-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #a970ff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+
+    .auth-switch-button:hover {
+        color: #c29aff;
+        text-shadow: 0 0 14px rgba(169, 112, 255, 0.35);
+    }
+
+
+/* =========================================================
+   MENSAJE DE REGISTRO CORRECTO
+   ========================================================= */
+
+.auth-success {
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid rgba(126, 231, 167, 0.25);
+    border-radius: 9px;
+    background: rgba(69, 170, 109, 0.10);
+    color: #9de6b9;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .auth-flip-container {
+        max-width: 100%;
+    }
+
+    .auth-switch {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

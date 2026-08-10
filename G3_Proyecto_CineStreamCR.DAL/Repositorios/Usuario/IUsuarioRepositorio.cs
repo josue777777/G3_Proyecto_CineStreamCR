@@ -8,10 +8,13 @@ namespace G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario
         Task<Entidades.Usuario?> ObtenerPorIdentificadorAsync(
             string identificador);
 
-        // Permite verificar si ya existe un correo.
+        // Verifica si ya existe un correo.
         Task<bool> ExisteCorreoAsync(string correo);
 
-        // Permite verificar si ya existe un nombre de usuario.
+        // Verifica si ya existe un nombre de usuario.
         Task<bool> ExisteNombreUsuarioAsync(string nombreUsuario);
+
+        // Crea un nuevo usuario.
+        Task<bool> CrearUsuarioAsync(Entidades.Usuario usuario);
     }
 }

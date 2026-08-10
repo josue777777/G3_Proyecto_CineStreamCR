@@ -2,7 +2,7 @@ using G3_Proyecto_CineStreamCR.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using G3_Proyecto_CineStreamCR.BLL.Services.Usuario;
 using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
-using G3_Proyecto_CineStreamCR.Data;
+
 
 // Program.cs
 // Punto de entrada principal de la aplicación.
@@ -53,22 +53,6 @@ builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 
 var app = builder.Build();
 
-// ====================== INICIALIZACIÓN DE BASE DE DATOS ======================
-
-// ====================== DATOS INICIALES ======================
-
-// En desarrollo crea los datos mínimos necesarios
-// para poder probar la aplicación.
-if (app.Environment.IsDevelopment())
-{
-    using var scope = app.Services.CreateScope();
-
-    var context =
-        scope.ServiceProvider
-            .GetRequiredService<ApplicationDbContext>();
-
-    await InicializadorDatos.InicializarAsync(context);
-}
 
 
 // ====================== PIPELINE HTTP ======================

@@ -1,8 +1,8 @@
-﻿@model G3_Proyecto_CineStreamCR.Models.Auth.LoginViewModel
+﻿@model G3_Proyecto_CineStreamCR.Models.Auth.AuthViewModel
 
 @{
     Layout = null;
-    ViewData["Title"] = "Iniciar sesión";
+    ViewData["Title"] = "CineStream CR";
 }
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - CineStream CR</title>
+    <title>@ViewData["Title"]</title>
 
     <link rel="stylesheet"
           href="~/css/site.css"
@@ -26,86 +26,263 @@
 </head>
 
 <body>
+
     <div class="auth-page">
 
         <div class="auth-background"></div>
 
         <div class="auth-container">
 
+            <!-- Marca principal -->
             <div class="auth-brand">
                 <span class="brand-cine">CINE</span>
                 <span class="brand-stream">STREAM</span>
                 <span class="brand-cr">CR</span>
             </div>
 
-            <div class="auth-card">
 
-                <div class="auth-header">
-                    <h1>Iniciar sesión</h1>
+            <!--
+                MostrarRegistro permite regresar directamente
+                al formulario de registro cuando este contiene errores.
+            -->
+            <div id="authCard"
+                 class="auth-flip-container @(Model.MostrarRegistro ? "is-register" : "")">
 
-                    <p>
-                        Disfruta tus películas y continúa donde lo dejaste.
-                    </p>
-                </div>
 
-                <form asp-controller="Auth"
-                      asp-action="Login"
-                      method="post"
-                      class="auth-form">
+                <!-- ====================================== -->
+                <!-- LOGIN -->
+                <!-- ====================================== -->
 
-                    <div asp-validation-summary="ModelOnly"
-                         class="auth-error">
+                <section class="auth-card auth-card-login">
+
+                    <div class="auth-header">
+                        <h1>Iniciar sesión</h1>
+
+                        <p>
+                            Disfruta tus películas y continúa donde lo dejaste.
+                        </p>
                     </div>
 
-                    <div class="form-group">
 
-                        <label asp-for="Identificador">
-                            Correo o nombre de usuario
-                        </label>
+                    @if (TempData["RegistroExitoso"] != null)
+                    {
+                        <div class="auth-success">
+                            @TempData["RegistroExitoso"]
+                        </div>
+                    }
 
-                        <input asp-for="Identificador"
-                               class="auth-input"
-                               autocomplete="username"
-                               placeholder="Correo o usuario" />
 
-                        <span asp-validation-for="Identificador"
-                              class="field-error">
+                    <form asp-controller="Auth"
+                          asp-action="Login"
+                          method="post"
+                          class="auth-form">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="auth-error">
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Login.Identificador">
+                                Correo o nombre de usuario
+                            </label>
+
+                            <input asp-for="Login.Identificador"
+                                   class="auth-input"
+                                   autocomplete="username"
+                                   placeholder="Correo o usuario" />
+
+                            <span asp-validation-for="Login.Identificador"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Login.Contrasenna">
+                                Contraseña
+                            </label>
+
+                            <input asp-for="Login.Contrasenna"
+                                   class="auth-input"
+                                   autocomplete="current-password"
+                                   placeholder="Contraseña" />
+
+                            <span asp-validation-for="Login.Contrasenna"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="auth-button">
+                            Iniciar sesión
+                        </button>
+
+                    </form>
+
+
+                    <div class="auth-switch">
+
+                        <span>
+                            ¿No tienes una cuenta?
                         </span>
 
+                        <button type="button"
+                                id="btnMostrarRegistro"
+                                class="auth-switch-button">
+                            Crear cuenta
+                        </button>
+
                     </div>
 
-                    <div class="form-group">
+                </section>
 
-                        <label asp-for="Contrasenna">
-                            Contraseña
-                        </label>
 
-                        <input asp-for="Contrasenna"
-                               class="auth-input"
-                               autocomplete="current-password"
-                               placeholder="Contraseña" />
+                <!-- ====================================== -->
+                <!-- REGISTRO -->
+                <!-- ====================================== -->
 
-                        <span asp-validation-for="Contrasenna"
-                              class="field-error">
+                <section class="auth-card auth-card-register">
+
+                    <div class="auth-header">
+
+                        <h1>Crear cuenta</h1>
+
+                        <p>
+                            Crea tu cuenta y comienza a disfrutar CineStream CR.
+                        </p>
+
+                    </div>
+
+
+                    <form asp-controller="Auth"
+                          asp-action="Register"
+                          method="post"
+                          class="auth-form">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="auth-error">
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Registro.NombreUsuario">
+                                Nombre de usuario
+                            </label>
+
+                            <input asp-for="Registro.NombreUsuario"
+                                   class="auth-input"
+                                   autocomplete="username"
+                                   placeholder="Nombre de usuario" />
+
+                            <span asp-validation-for="Registro.NombreUsuario"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Registro.Correo">
+                                Correo electrónico
+                            </label>
+
+                            <input asp-for="Registro.Correo"
+                                   class="auth-input"
+                                   autocomplete="email"
+                                   placeholder="correo@ejemplo.com" />
+
+                            <span asp-validation-for="Registro.Correo"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Registro.Contrasenna">
+                                Contraseña
+                            </label>
+
+                            <input asp-for="Registro.Contrasenna"
+                                   class="auth-input"
+                                   autocomplete="new-password"
+                                   placeholder="Contraseña" />
+
+                            <span asp-validation-for="Registro.Contrasenna"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label asp-for="Registro.ConfirmarContrasenna">
+                                Confirmar contraseña
+                            </label>
+
+                            <input asp-for="Registro.ConfirmarContrasenna"
+                                   class="auth-input"
+                                   autocomplete="new-password"
+                                   placeholder="Confirmar contraseña" />
+
+                            <span asp-validation-for="Registro.ConfirmarContrasenna"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="auth-button">
+                            Crear cuenta
+                        </button>
+
+                    </form>
+
+
+                    <div class="auth-switch">
+
+                        <span>
+                            ¿Ya tienes una cuenta?
                         </span>
 
+                        <button type="button"
+                                id="btnMostrarLogin"
+                                class="auth-switch-button">
+                            Iniciar sesión
+                        </button>
+
                     </div>
 
-                    <button type="submit"
-                            class="auth-button">
-                        Iniciar sesión
-                    </button>
-
-                </form>
+                </section>
 
             </div>
+
         </div>
+
     </div>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/js/auth.js"
+            asp-append-version="true">
+    </script>
+
 </body>
+
 </html>
