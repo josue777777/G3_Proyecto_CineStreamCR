@@ -4,6 +4,12 @@ using G3_Proyecto_CineStreamCR.BLL.Services.Usuario;
 using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
 using G3_Proyecto_CineStreamCR.BLL.Services.Calificacion;
 using G3_Proyecto_CineStreamCR.BLL.Services.Reproduccion;
+using G3_Proyecto_CineStreamCR.BLL.Services.Pelicula;
+using G3_Proyecto_CineStreamCR.DAL.Repositorios.Pelicula;
+using G3_Proyecto_CineStreamCR.BLL.Services.WatchList;
+using G3_Proyecto_CineStreamCR.DAL.Repositorios.WatchList;
+using G3_Proyecto_CineStreamCR.BLL.Services.Persona;
+using G3_Proyecto_CineStreamCR.DAL.Repositorios.Persona;
 using G3_Proyecto_CineStreamCR.Data;
 
 
@@ -52,6 +58,20 @@ builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 // Registra dependencias de calificación y reproducción.
 builder.Services.AddScoped<ICalificacionService, CalificacionService>();
 builder.Services.AddScoped<IReproduccionService, ReproduccionService>();
+
+// ====================== DEPENDENCIAS DE CATÁLOGO / DETALLE (PELÍCULA) ======================
+
+// Catálogo y detalle de películas.
+builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
+builder.Services.AddScoped<IPeliculaService, PeliculaService>();
+
+// Integración mínima de WatchList reutilizada por el catálogo y el detalle.
+builder.Services.AddScoped<IWatchListRepositorio, WatchListRepositorio>();
+builder.Services.AddScoped<IWatchListService, WatchListService>();
+
+// Perfil público de personas (director/actor), usado desde el detalle.
+builder.Services.AddScoped<IPersonaRepositorio, PersonaRepositorio>();
+builder.Services.AddScoped<IPersonaService, PersonaService>();
 
 // ====================== CONSTRUCCIÓN DE LA APP ======================
 

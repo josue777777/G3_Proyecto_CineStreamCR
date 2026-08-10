@@ -1,0 +1,76 @@
+@model G3_Proyecto_CineStreamCR.Models.Peliculas.CatalogoIndexViewModel
+@{
+    var resultado = Model.Resultado;
+}
+
+@if (!resultado.Items.Any())
+{
+    <div class="text-center py-5 rounded catalogo-vacio">
+        <p class="text-muted fs-4 mb-0">No se encontraron películas con los filtros seleccionados.</p>
+    </div>
+}
+else
+{
+    <div class="movie-grid">
+        @foreach (var pelicula in resultado.Items)
+        {
+            <div class="movie-card" data-id="@pelicula.IdPelicula">
+                <div class="movie-poster-wrapper">
+                    <img class="movie-poster" src="@pelicula.PosterUrl" alt="Póster de @pelicula.Titulo" />
+
+                    <button type="button"
+                            class="watchlist-toggle-btn @(pelicula.EnWatchList ? "is-active" : "")"
+                            data-id="@pelicula.IdPelicula"
+                            title="@(pelicula.EnWatchList ? "Quitar de mi lista" : "Agregar a mi lista")">
+                        @(pelicula.EnWatchList ? "✓" : "+")
+                    </button>
+
+                    <div class="movie-card-overlay">
+                        <a href="/Reproductor/Ver/@pelicula.IdPelicula" class="play-btn-circle" title="Reproducir película">
+                            <span>▶</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="movie-content">
+                    <a href="/Peliculas/Detalle/@pelicula.IdPelicula" class="movie-card-title">@pelicula.Titulo</a>
+                    <div class="movie-meta">
+                        <span class="movie-year">@pelicula.Anio</span>
+                        <span class="movie-duration">@pelicula.DuracionMinutos min</span>
+                        <span class="movie-rating">
+                            ⭐ @(pelicula.Rating > 0 ? pelicula.Rating.ToString("0.0") : "N/A")
+                        </span>
+                    </div>
+                    <p class="movie-synopsis">@pelicula.Sinopsis</p>
+                    <div class="movie-footer-actions">
+                        <a href="/Peliculas/Detalle/@pelicula.IdPelicula" class="btn-detail">Detalles</a>
+                        <a href="/Reproductor/Ver/@pelicula.IdPelicula" class="btn-play-card">▶ Ver</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (resultado.TotalPaginas > 1)
+    {
+        <nav class="catalogo-paginacion" aria-label="Paginación de películas">
+            <button type="button"
+                    class="pagina-btn"
+                    data-page="@(resultado.PaginaActual - 1)"
+                    disabled="@(resultado.PaginaActual <= 1)">
+                &larr; Anterior
+            </button>
+
+            <span class="pagina-info">
+                Página @resultado.PaginaActual de @resultado.TotalPaginas
+                (@resultado.TotalRegistros película@(resultado.TotalRegistros == 1 ? "" : "s"))
+            </span>
+
+            <button type="button"
+                    class="pagina-btn"
+                    data-page="@(resultado.PaginaActual + 1)"
+                    disabled="@(resultado.PaginaActual >= resultado.TotalPaginas)">
+                Siguiente &rarr;
+            </button>
+        </nav>
+    }
+}

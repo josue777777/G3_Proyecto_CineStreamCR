@@ -1,0 +1,226 @@
+@model G3_Proyecto_CineStreamCR.BLL.Dtos.Personas.PersonaDetalleDto
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --hbo-purple: #9F53FF;
+        --hbo-dark-purple: #5F1BCE;
+        --bg-dark: #0A0A16;
+        --card-bg: rgba(22, 22, 42, 0.6);
+        --border-purple: rgba(159, 83, 255, 0.2);
+    }
+
+    body.cinestream-body {
+        background-color: var(--bg-dark);
+        color: #ffffff;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .persona-detail-container {
+        padding-top: 30px;
+        margin-bottom: 60px;
+    }
+
+    .persona-banner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        background: linear-gradient(135deg, rgba(10, 10, 22, 0.95) 0%, rgba(95, 27, 206, 0.15) 100%);
+        border: 1px solid var(--border-purple);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .persona-photo-wrapper {
+        flex: 0 0 220px;
+    }
+
+    .persona-photo {
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 1px solid var(--hbo-purple);
+        box-shadow: 0 0 25px rgba(159, 83, 255, 0.3);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .persona-info {
+        flex: 1 1 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .persona-name {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+        line-height: 1.1;
+        background: linear-gradient(45deg, #ffffff, var(--hbo-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .persona-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        color: #b0b5d0;
+        font-size: 0.95rem;
+        margin-bottom: 18px;
+    }
+
+    .persona-bio {
+        color: #d1d5db;
+        line-height: 1.6;
+        font-size: 1.02rem;
+    }
+
+    .filmografia-section {
+        margin-top: 40px;
+    }
+
+    .filmografia-title {
+        color: var(--hbo-purple);
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 1.05rem;
+    }
+
+    .filmografia-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 20px;
+    }
+
+    .filmografia-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-purple);
+        border-radius: 12px;
+        overflow: hidden;
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease;
+        display: block;
+    }
+
+    .filmografia-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--hbo-purple);
+        color: white;
+        box-shadow: 0 10px 25px rgba(159, 83, 255, 0.2);
+    }
+
+    .filmografia-poster {
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+        background: #000;
+    }
+
+    .filmografia-info {
+        padding: 10px 12px;
+    }
+
+    .filmografia-info-title {
+        font-weight: 600;
+        font-size: 0.92rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .filmografia-info-meta {
+        font-size: 0.8rem;
+        color: #9da4c0;
+        margin-top: 2px;
+    }
+</style>
+
+<div class="container persona-detail-container">
+    <a href="javascript:history.back()" class="btn btn-link text-decoration-none text-white-50 mb-3 fs-5 ps-0">
+        &larr; Volver
+    </a>
+
+    <div class="persona-banner">
+        <div class="persona-photo-wrapper">
+            @if (!string.IsNullOrWhiteSpace(Model.FotoUrl))
+            {
+                <img class="persona-photo" src="@Model.FotoUrl" alt="Foto de @Model.Nombre" />
+            }
+            else
+            {
+                <div class="persona-photo d-flex align-items-center justify-content-center text-white-50">Sin foto</div>
+            }
+        </div>
+        <div class="persona-info">
+            <h1 class="persona-name">@Model.Nombre</h1>
+            <div class="persona-meta">
+                @if (!string.IsNullOrWhiteSpace(Model.Nacionalidad))
+                {
+                    <span>🌎 @Model.Nacionalidad</span>
+                }
+                @if (Model.FechaNacimiento.HasValue)
+                {
+                    <span>🎂 @Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")</span>
+                }
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Biografia))
+            {
+                <p class="persona-bio">@Model.Biografia</p>
+            }
+        </div>
+    </div>
+
+    @if (Model.PeliculasComoDirector.Any())
+    {
+        <div class="filmografia-section">
+            <h3 class="filmografia-title">Como director</h3>
+            <div class="filmografia-grid">
+                @foreach (var peli in Model.PeliculasComoDirector)
+                {
+                    <a href="/Peliculas/Detalle/@peli.IdPelicula" class="filmografia-card">
+                        <img class="filmografia-poster" src="@peli.PosterUrl" alt="Póster de @peli.Titulo" />
+                        <div class="filmografia-info">
+                            <div class="filmografia-info-title">@peli.Titulo</div>
+                            <div class="filmografia-info-meta">@peli.Anio</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.PeliculasComoActor.Any())
+    {
+        <div class="filmografia-section">
+            <h3 class="filmografia-title">Como actor</h3>
+            <div class="filmografia-grid">
+                @foreach (var peli in Model.PeliculasComoActor)
+                {
+                    <a href="/Peliculas/Detalle/@peli.IdPelicula" class="filmografia-card">
+                        <img class="filmografia-poster" src="@peli.PosterUrl" alt="Póster de @peli.Titulo" />
+                        <div class="filmografia-info">
+                            <div class="filmografia-info-title">@peli.Titulo</div>
+                            <div class="filmografia-info-meta">@peli.Anio · @peli.Personaje</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    @if (!Model.PeliculasComoDirector.Any() && !Model.PeliculasComoActor.Any())
+    {
+        <p class="text-white-50 mt-4">Todavía no hay películas registradas para esta persona.</p>
+    }
+</div>
