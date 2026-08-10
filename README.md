@@ -11,3 +11,4 @@ Josué Navarro Barrantes
 hnavarro60373@ufide.ac.cr
 Raul Castro Acuña
 rcastro70272@ufide.ac.cr          
+https://github.com/josue777777/G3_Proyecto_CineStreamCR
