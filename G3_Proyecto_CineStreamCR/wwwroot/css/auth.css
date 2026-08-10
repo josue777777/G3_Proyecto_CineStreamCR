@@ -1,10 +1,54 @@
+/* =========================================================
+   CINESTREAM CR - ACCESO
+   Parte del proyecto: Login y Registro.
+   Finalidad: identidad visual inspirada en plataformas
+   modernas de streaming.
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+    --auth-black: #000000;
+    --auth-black-soft: #050509;
+    --auth-surface: #111016;
+    --auth-surface-light: #18161f;
+    --auth-purple: #7c3aed;
+    --auth-purple-light: #a855f7;
+    --auth-purple-bright: #c084fc;
+    --auth-white: #ffffff;
+    --auth-text-soft: #b2aeba;
+    --auth-text-muted: #74707b;
+    --auth-border: rgba(255, 255, 255, 0.10);
+}
+
+
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 html,
 body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: #05050a;
-    color: #ffffff;
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--auth-black);
+    color: var(--auth-white);
+}
+
+body {
+    overflow-x: hidden;
 }
 
 button,
@@ -14,38 +58,68 @@ select {
     font-family: inherit;
 }
 
-
-.auth-page {
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
-    background: radial-gradient(circle at 20% 20%, rgba(95, 39, 205, 0.28), transparent 38%), radial-gradient(circle at 80% 30%, rgba(61, 32, 140, 0.22), transparent 42%), linear-gradient(135deg, #05050a 0%, #0d0818 48%, #090611 100%);
-    color: #ffffff;
+button {
+    cursor: pointer;
 }
 
-.auth-background {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient( 180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.62) 100% );
-    pointer-events: none;
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
-.auth-container {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.landing-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 68px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 32px 20px;
+    justify-content: space-between;
+    padding: 0 3.5%;
+    background: linear-gradient( 180deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.35), transparent );
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
 }
 
-.auth-brand {
-    margin-bottom: 34px;
-    font-size: 30px;
-    font-weight: 800;
-    letter-spacing: 3px;
+    .landing-header.scrolled {
+        background: rgba(2, 2, 5, 0.92);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+
+/* =========================================================
+   MARCA
+   ========================================================= */
+
+.landing-logo,
+.hero-brand,
+.footer-brand {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    font-weight: 850;
+    letter-spacing: 2.5px;
+}
+
+.landing-logo {
+    font-size: 18px;
+}
+
+.hero-brand {
+    margin-bottom: 22px;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: 5px;
+}
+
+.footer-brand {
+    font-size: 18px;
 }
 
 .brand-cine {
@@ -53,138 +127,361 @@ select {
 }
 
 .brand-stream {
-    color: #a970ff;
+    margin-left: 7px;
+    color: var(--auth-purple-light);
 }
 
 .brand-cr {
+    margin-left: 7px;
     color: #ffffff;
-    margin-left: 5px;
 }
 
-.auth-card {
-    width: 100%;
-    max-width: 430px;
-    padding: 42px 38px;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 18px;
-    background: rgba(14, 11, 25, 0.88);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 45px rgba(111, 45, 214, 0.12);
-}
-
-.auth-header {
-    margin-bottom: 30px;
-}
-
-    .auth-header h1 {
-        margin: 0 0 10px;
-        font-size: 30px;
-        font-weight: 700;
-    }
-
-    .auth-header p {
-        margin: 0;
-        color: #aaa5b7;
-        font-size: 15px;
-        line-height: 1.5;
-    }
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 21px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-    .form-group label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #e7e3ed;
-    }
-
-.auth-input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 10px;
-    outline: none;
-    background: #181320;
-    color: #ffffff;
-    font-size: 15px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-    .auth-input::placeholder {
-        color: #777181;
-    }
-
-    .auth-input:focus {
-        border-color: #9c62ff;
-        background: #1c1627;
-        box-shadow: 0 0 0 3px rgba(156, 98, 255, 0.14);
-    }
-
-.auth-button {
-    width: 100%;
-    margin-top: 6px;
-    padding: 14px 18px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #7040d7, #9e62ff);
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-}
-
-    .auth-button:hover {
-        transform: translateY(-1px);
-        filter: brightness(1.08);
-        box-shadow: 0 10px 28px rgba(112, 64, 215, 0.30);
-    }
-
-.auth-error,
-.field-error {
-    color: #ff808f;
-    font-size: 13px;
-}
-
-    .auth-error ul {
-        padding-left: 18px;
-        margin-bottom: 0;
-    }
-
-@media (max-width: 576px) {
-    .auth-card {
-        padding: 32px 24px;
-        border-radius: 14px;
-    }
-
-    .auth-brand {
-        font-size: 25px;
-    }
-
-    .auth-header h1 {
-        font-size: 26px;
-    }
-}
 
 /* =========================================================
-   CAMBIO ENTRE LOGIN Y REGISTRO
+   HEADER - ACCIONES
+   ========================================================= */
+
+.landing-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-login-button,
+.header-register-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.header-login-button {
+    background: transparent;
+    color: #ffffff;
+}
+
+    .header-login-button:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+.header-register-button {
+    background: #ffffff;
+    color: #050505;
+}
+
+    .header-register-button:hover {
+        transform: translateY(-1px);
+        background: #eeeaf4;
+    }
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #030305;
+}
+
+
+/* =========================================================
+   MOSAICO CINEMATOGRÁFICO
+   ========================================================= */
+
+.hero-mosaic {
+    position: absolute;
+    inset: -5%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 9px;
+    transform: scale(1.05);
+    opacity: 0.65;
+}
+
+.mosaic-column {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+    .mosaic-column:nth-child(even) {
+        transform: translateY(-70px);
+    }
+
+    .mosaic-column:nth-child(odd) {
+        transform: translateY(-15px);
+    }
+
+.mosaic-card {
+    flex: 1;
+    min-height: 210px;
+    border-radius: 2px;
+    background-position: center;
+    background-size: cover;
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.20);
+}
+
+
+/*
+   Estas tarjetas funcionan como ambientación visual.
+   Más adelante pueden reemplazarse por posters reales
+   almacenados en wwwroot/images.
+*/
+
+.poster-one {
+    background: linear-gradient(145deg, #392764, #12101b);
+}
+
+.poster-two {
+    background: linear-gradient(135deg, #64343e, #1b0c10);
+}
+
+.poster-three {
+    background: linear-gradient(150deg, #173a42, #071417);
+}
+
+.poster-four {
+    background: linear-gradient(135deg, #7e5237, #21110b);
+}
+
+.poster-five {
+    background: linear-gradient(145deg, #263949, #080d13);
+}
+
+.poster-six {
+    background: linear-gradient(135deg, #70436d, #160d1a);
+}
+
+.poster-seven {
+    background: linear-gradient(145deg, #495d3e, #111810);
+}
+
+.poster-eight {
+    background: linear-gradient(135deg, #28486a, #080f19);
+}
+
+.poster-nine {
+    background: linear-gradient(145deg, #755b36, #181006);
+}
+
+.poster-ten {
+    background: linear-gradient(135deg, #483567, #0d0915);
+}
+
+.poster-eleven {
+    background: linear-gradient(145deg, #774832, #1b0d07);
+}
+
+.poster-twelve {
+    background: linear-gradient(135deg, #24454a, #071112);
+}
+
+.poster-thirteen {
+    background: linear-gradient(145deg, #54404d, #130d12);
+}
+
+.poster-fourteen {
+    background: linear-gradient(135deg, #53542f, #101107);
+}
+
+.poster-fifteen {
+    background: linear-gradient(145deg, #24425d, #080e15);
+}
+
+
+/* =========================================================
+   OSCURECIMIENTO DEL HERO
+   ========================================================= */
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.35) 25%, rgba(0, 0, 0, 0.70) 68%, #000000 100% ), radial-gradient( circle at center, rgba(31, 15, 54, 0.20), rgba(0, 0, 0, 0.60) );
+}
+
+
+/* =========================================================
+   HERO - CONTENIDO
+   ========================================================= */
+
+.hero-content {
+    position: relative;
+    z-index: 4;
+    width: min(920px, 90%);
+    padding-top: 50px;
+    text-align: center;
+}
+
+    .hero-content h1 {
+        max-width: 900px;
+        margin: 0 auto 18px;
+        font-size: clamp(38px, 6vw, 76px);
+        font-weight: 750;
+        letter-spacing: -2.5px;
+        line-height: 1.02;
+    }
+
+        .hero-content h1 span {
+            display: block;
+            background: linear-gradient( 90deg, #ffffff, #d1b9ff, #ffffff );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+    .hero-content p {
+        max-width: 650px;
+        margin: 0 auto 32px;
+        color: rgba(255, 255, 255, 0.76);
+        font-size: clamp(15px, 2vw, 19px);
+        line-height: 1.6;
+    }
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.hero-primary-button,
+.hero-secondary-button {
+    min-width: 155px;
+    padding: 13px 23px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-primary-button {
+    border: 0;
+    background: #ffffff;
+    color: #050505;
+}
+
+    .hero-primary-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(255, 255, 255, 0.13);
+    }
+
+.hero-secondary-button {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.30);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+}
+
+    .hero-secondary-button:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.10);
+    }
+
+
+/* =========================================================
+   INDICADOR DE SCROLL
+   ========================================================= */
+
+.scroll-indicator {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    bottom: 24px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+}
+
+    .scroll-indicator span {
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid rgba(255, 255, 255, 0.65);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.65);
+        transform: rotate(45deg);
+        animation: scrollIndicator 1.7s infinite;
+    }
+
+@keyframes scrollIndicator {
+
+    0%, 100% {
+        opacity: 0.35;
+        transform: translateY(-3px) rotate(45deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(5px) rotate(45deg);
+    }
+}
+
+
+/* =========================================================
+   SECCIÓN DE ACCESO
+   ========================================================= */
+
+.access-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px 120px;
+    background: radial-gradient( circle at 50% 30%, rgba(85, 38, 168, 0.16), transparent 36% ), #000000;
+}
+
+.access-intro {
+    width: min(680px, 100%);
+    margin-bottom: 42px;
+    text-align: center;
+}
+
+.section-eyebrow,
+.auth-label {
+    display: inline-block;
+    color: #9a64ef;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 2px;
+}
+
+.access-intro h2,
+.section-heading h2,
+.preview-content h2 {
+    margin: 12px 0;
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.1;
+}
+
+.access-intro p {
+    margin: 0;
+    color: var(--auth-text-soft);
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   CONTENEDOR LOGIN / REGISTRO
    ========================================================= */
 
 .auth-flip-container {
     position: relative;
     width: 100%;
-    max-width: 430px;
+    max-width: 460px;
     display: grid;
-    perspective: 1200px;
+    perspective: 1300px;
 }
 
     .auth-flip-container .auth-card {
@@ -192,12 +489,28 @@ select {
         width: 100%;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
-        transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
         transform-style: preserve-3d;
+        transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
     }
 
 
-/* Login visible inicialmente */
+/* =========================================================
+   TARJETA DE AUTENTICACIÓN
+   ========================================================= */
+
+.auth-card {
+    padding: 44px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 16px;
+    background: linear-gradient( 160deg, rgba(24, 21, 31, 0.96), rgba(10, 9, 14, 0.98) );
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(20px);
+}
+
+
+/* =========================================================
+   GIRO LOGIN / REGISTRO
+   ========================================================= */
 
 .auth-card-login {
     position: relative;
@@ -205,9 +518,6 @@ select {
     transform: rotateY(0deg);
     opacity: 1;
 }
-
-
-/* Registro oculto inicialmente */
 
 .auth-card-register {
     position: relative;
@@ -217,17 +527,15 @@ select {
     pointer-events: none;
 }
 
-
-/* Al activar Registro */
-
-.auth-flip-container.is-register .auth-card-login {
+.auth-flip-container.is-register
+.auth-card-login {
     transform: rotateY(-180deg);
     opacity: 0;
     pointer-events: none;
 }
 
-
-.auth-flip-container.is-register .auth-card-register {
+.auth-flip-container.is-register
+.auth-card-register {
     transform: rotateY(0deg);
     opacity: 1;
     pointer-events: auto;
@@ -236,54 +544,294 @@ select {
 
 
 /* =========================================================
-   CAMBIO DE FORMULARIO
+   ENCABEZADO DEL FORMULARIO
    ========================================================= */
 
-.auth-switch {
-    margin-top: 26px;
-    padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 7px;
-    color: #aaa5b7;
-    font-size: 14px;
+.auth-header {
+    margin-bottom: 28px;
 }
 
+    .auth-header h2 {
+        margin: 7px 0 9px;
+        font-size: 30px;
+        font-weight: 720;
+    }
 
-.auth-switch-button {
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: #a970ff;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: color 0.2s ease, text-shadow 0.2s ease;
-}
-
-
-    .auth-switch-button:hover {
-        color: #c29aff;
-        text-shadow: 0 0 14px rgba(169, 112, 255, 0.35);
+    .auth-header p {
+        margin: 0;
+        color: var(--auth-text-soft);
+        font-size: 14px;
+        line-height: 1.55;
     }
 
 
 /* =========================================================
-   MENSAJE DE REGISTRO CORRECTO
+   FORMULARIO
    ========================================================= */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+    .form-group label {
+        color: #e8e5ec;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+.auth-input {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 8px;
+    outline: none;
+    background: #19161f;
+    color: #ffffff;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+    .auth-input::placeholder {
+        color: #716c78;
+    }
+
+    .auth-input:hover {
+        background: #1d1924;
+    }
+
+    .auth-input:focus {
+        border-color: #9a63ed;
+        background: #1d1924;
+        box-shadow: 0 0 0 3px rgba(151, 89, 241, 0.14);
+    }
+
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
+
+.auth-button {
+    width: 100%;
+    margin-top: 3px;
+    padding: 14px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: linear-gradient( 90deg, #713be4, #a259ff );
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 750;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .auth-button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
+        box-shadow: 0 12px 30px rgba(126, 66, 224, 0.25);
+    }
+
+
+/* =========================================================
+   CAMBIO LOGIN / REGISTRO
+   ========================================================= */
+
+.auth-switch {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.075);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: var(--auth-text-soft);
+    font-size: 13px;
+}
+
+.auth-switch-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--auth-purple-bright);
+    font-size: 13px;
+    font-weight: 750;
+}
+
+    .auth-switch-button:hover {
+        text-decoration: underline;
+    }
+
+
+/* =========================================================
+   MENSAJES
+   ========================================================= */
+
+.auth-error,
+.field-error {
+    color: #ff8996;
+    font-size: 12px;
+}
+
+    .auth-error ul {
+        margin: 0 0 4px;
+        padding-left: 18px;
+    }
 
 .auth-success {
     margin-bottom: 20px;
-    padding: 12px 14px;
-    border: 1px solid rgba(126, 231, 167, 0.25);
-    border-radius: 9px;
-    background: rgba(69, 170, 109, 0.10);
-    color: #9de6b9;
+    padding: 11px 13px;
+    border: 1px solid rgba(111, 225, 156, 0.25);
+    border-radius: 8px;
+    background: rgba(52, 163, 95, 0.09);
+    color: #9be6b7;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EXPERIENCIA
+   ========================================================= */
+
+.experience-section {
+    position: relative;
+    padding: 110px 5% 130px;
+    background: linear-gradient( 180deg, #000000, #060409 65%, #000000 );
+}
+
+.section-heading {
+    max-width: 750px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.experience-grid {
+    width: min(1200px, 100%);
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.experience-card {
+    min-height: 250px;
+    padding: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-radius: 14px;
+    background: linear-gradient( 145deg, rgba(25, 20, 33, 0.90), rgba(9, 8, 12, 0.96) );
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+    .experience-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(171, 104, 255, 0.30);
+        background: linear-gradient( 145deg, rgba(35, 25, 48, 0.95), rgba(9, 8, 12, 0.98) );
+    }
+
+.experience-icon {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(143, 74, 241, 0.13);
+    color: #b47cff;
+}
+
+    .experience-icon svg {
+        width: 21px;
+        height: 21px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+.experience-card h3 {
+    margin: 0 0 10px;
+    font-size: 21px;
+}
+
+.experience-card p {
+    margin: 0;
+    color: var(--auth-text-soft);
     font-size: 13px;
-    line-height: 1.45;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   PREVIEW DE CATEGORÍAS
+   ========================================================= */
+
+.preview-section {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 5%;
+    background: radial-gradient( ellipse at 50% 100%, rgba(103, 47, 186, 0.22), transparent 55% ), #000000;
+}
+
+.preview-content {
+    width: 100%;
+    text-align: center;
+}
+
+.preview-categories {
+    width: min(1100px, 100%);
+    margin: 55px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(20px, 6vw, 85px);
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.32);
+    font-size: clamp(22px, 4vw, 48px);
+    white-space: nowrap;
+}
+
+    .preview-categories span:nth-child(3) {
+        color: #ffffff;
+        transform: scale(1.12);
+    }
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.landing-footer {
+    padding: 70px 20px 45px;
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+    background: #000000;
+    text-align: center;
+}
+
+    .landing-footer p {
+        margin: 14px 0 24px;
+        color: var(--auth-text-muted);
+        font-size: 12px;
+    }
+
+.footer-separator {
+    width: min(700px, 90%);
+    height: 1px;
+    margin: 0 auto 23px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.footer-copyright {
+    color: #55515a;
+    font-size: 11px;
 }
 
 
@@ -291,14 +839,96 @@ select {
    RESPONSIVE
    ========================================================= */
 
+@media (max-width: 900px) {
+
+    .hero-mosaic {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mosaic-column:nth-child(4),
+    .mosaic-column:nth-child(5) {
+        display: none;
+    }
+
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-card {
+        min-height: auto;
+    }
+
+    .experience-icon {
+        margin-bottom: 30px;
+    }
+}
+
+
 @media (max-width: 576px) {
 
-    .auth-flip-container {
-        max-width: 100%;
+    .landing-header {
+        height: 58px;
+        padding: 0 15px;
+    }
+
+    .landing-logo {
+        font-size: 14px;
+        letter-spacing: 1.5px;
+    }
+
+    .header-register-button {
+        display: none;
+    }
+
+    .header-login-button {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .hero-mosaic {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mosaic-column:nth-child(3) {
+        display: none;
+    }
+
+    .hero-content h1 {
+        letter-spacing: -1.5px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-primary-button,
+    .hero-secondary-button {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .access-section {
+        padding: 85px 16px;
+    }
+
+    .auth-card {
+        padding: 32px 23px;
+        border-radius: 13px;
+    }
+
+    .auth-header h2 {
+        font-size: 26px;
     }
 
     .auth-switch {
         flex-direction: column;
         gap: 5px;
+    }
+
+    .preview-categories {
+        justify-content: flex-start;
+        padding: 0 20px;
+        overflow-x: auto;
     }
 }

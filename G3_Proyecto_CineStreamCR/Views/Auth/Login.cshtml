@@ -8,7 +8,9 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
+
     <meta charset="utf-8" />
 
     <meta name="viewport"
@@ -17,50 +19,229 @@
     <title>@ViewData["Title"]</title>
 
     <link rel="stylesheet"
-          href="~/css/site.css"
-          asp-append-version="true" />
-
-    <link rel="stylesheet"
           href="~/css/auth.css"
           asp-append-version="true" />
+
 </head>
+
 
 <body>
 
-    <div class="auth-page">
 
-        <div class="auth-background"></div>
+    <!-- =========================================================
+         HEADER DE ACCESO
+         Parte del proyecto: Login / Registro.
+         Finalidad: mantener visible la identidad de CineStream CR
+         mientras el usuario navega por la pantalla de acceso.
+         ========================================================= -->
 
-        <div class="auth-container">
+    <header class="landing-header">
 
-            <!-- Marca principal -->
-            <div class="auth-brand">
-                <span class="brand-cine">CINE</span>
-                <span class="brand-stream">STREAM</span>
-                <span class="brand-cr">CR</span>
+        <a href="#inicio"
+           class="landing-logo">
+
+            <span class="brand-cine">CINE</span>
+            <span class="brand-stream">STREAM</span>
+            <span class="brand-cr">CR</span>
+
+        </a>
+
+
+        <nav class="landing-actions">
+
+            <button type="button"
+                    id="btnHeaderLogin"
+                    class="header-login-button">
+
+                Ingresar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnHeaderRegister"
+                    class="header-register-button">
+
+                Crear cuenta
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+
+    <main>
+
+
+        <!-- =========================================================
+             HERO
+             Parte del proyecto: presentación visual del acceso.
+             Finalidad: ofrecer una entrada cinematográfica inspirada
+             en plataformas modernas de streaming.
+             ========================================================= -->
+
+        <section id="inicio"
+                 class="hero-section">
+
+
+            <div class="hero-mosaic"
+                 aria-hidden="true">
+
+                <div class="mosaic-column mosaic-column-one">
+                    <div class="mosaic-card poster-one"></div>
+                    <div class="mosaic-card poster-two"></div>
+                    <div class="mosaic-card poster-three"></div>
+                </div>
+
+                <div class="mosaic-column mosaic-column-two">
+                    <div class="mosaic-card poster-four"></div>
+                    <div class="mosaic-card poster-five"></div>
+                    <div class="mosaic-card poster-six"></div>
+                </div>
+
+                <div class="mosaic-column mosaic-column-three">
+                    <div class="mosaic-card poster-seven"></div>
+                    <div class="mosaic-card poster-eight"></div>
+                    <div class="mosaic-card poster-nine"></div>
+                </div>
+
+                <div class="mosaic-column mosaic-column-four">
+                    <div class="mosaic-card poster-ten"></div>
+                    <div class="mosaic-card poster-eleven"></div>
+                    <div class="mosaic-card poster-twelve"></div>
+                </div>
+
+                <div class="mosaic-column mosaic-column-five">
+                    <div class="mosaic-card poster-thirteen"></div>
+                    <div class="mosaic-card poster-fourteen"></div>
+                    <div class="mosaic-card poster-fifteen"></div>
+                </div>
+
+            </div>
+
+
+            <div class="hero-overlay"></div>
+
+
+            <div class="hero-content">
+
+                <div class="hero-brand">
+
+                    <span class="brand-cine">CINE</span>
+                    <span class="brand-stream">STREAM</span>
+                    <span class="brand-cr">CR</span>
+
+                </div>
+
+
+                <h1>
+                    Las historias que quieres ver,
+                    <span>en un solo lugar.</span>
+                </h1>
+
+
+                <p>
+                    Descubre películas, crea tus listas favoritas
+                    y continúa disfrutando desde donde lo dejaste.
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <button type="button"
+                            id="btnHeroLogin"
+                            class="hero-primary-button">
+
+                        Iniciar sesión
+
+                    </button>
+
+
+                    <button type="button"
+                            id="btnHeroRegister"
+                            class="hero-secondary-button">
+
+                        Crear cuenta
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <a href="#acceso"
+               class="scroll-indicator"
+               aria-label="Ir al formulario de acceso">
+
+                <span></span>
+
+            </a>
+
+        </section>
+
+
+
+        <!-- =========================================================
+             AUTENTICACIÓN
+             Parte del proyecto: Login y Registro.
+             Finalidad: conservar exactamente la funcionalidad MVC
+             ya implementada mostrando ambos formularios en una vista.
+             ========================================================= -->
+
+        <section id="acceso"
+                 class="access-section">
+
+            <div class="access-intro">
+
+                <span class="section-eyebrow">
+                    CINESTREAM CR
+                </span>
+
+                <h2>
+                    Tu próxima película comienza aquí
+                </h2>
+
+                <p>
+                    Ingresa a tu cuenta o crea una nueva
+                    para comenzar a disfrutar la plataforma.
+                </p>
+
             </div>
 
 
             <!--
-                MostrarRegistro permite regresar directamente
-                al formulario de registro cuando este contiene errores.
+                MostrarRegistro conserva abierto el formulario
+                de registro cuando el servidor devuelve errores.
             -->
+
             <div id="authCard"
                  class="auth-flip-container @(Model.MostrarRegistro ? "is-register" : "")">
 
 
-                <!-- ====================================== -->
-                <!-- LOGIN -->
-                <!-- ====================================== -->
+                <!-- =================================================
+                     LOGIN
+                     ================================================= -->
 
                 <section class="auth-card auth-card-login">
 
                     <div class="auth-header">
-                        <h1>Iniciar sesión</h1>
+
+                        <span class="auth-label">
+                            BIENVENIDO
+                        </span>
+
+                        <h2>
+                            Iniciar sesión
+                        </h2>
 
                         <p>
-                            Disfruta tus películas y continúa donde lo dejaste.
+                            Continúa disfrutando tus películas
+                            y listas personales.
                         </p>
+
                     </div>
 
 
@@ -120,7 +301,9 @@
 
                         <button type="submit"
                                 class="auth-button">
+
                             Iniciar sesión
+
                         </button>
 
                     </form>
@@ -129,13 +312,15 @@
                     <div class="auth-switch">
 
                         <span>
-                            ¿No tienes una cuenta?
+                            ¿Aún no tienes una cuenta?
                         </span>
 
                         <button type="button"
                                 id="btnMostrarRegistro"
                                 class="auth-switch-button">
+
                             Crear cuenta
+
                         </button>
 
                     </div>
@@ -143,18 +328,26 @@
                 </section>
 
 
-                <!-- ====================================== -->
-                <!-- REGISTRO -->
-                <!-- ====================================== -->
+
+                <!-- =================================================
+                     REGISTRO
+                     ================================================= -->
 
                 <section class="auth-card auth-card-register">
 
                     <div class="auth-header">
 
-                        <h1>Crear cuenta</h1>
+                        <span class="auth-label">
+                            ÚNETE A CINESTREAM
+                        </span>
+
+                        <h2>
+                            Crear cuenta
+                        </h2>
 
                         <p>
-                            Crea tu cuenta y comienza a disfrutar CineStream CR.
+                            Regístrate para comenzar a organizar
+                            y disfrutar tus películas favoritas.
                         </p>
 
                     </div>
@@ -244,7 +437,9 @@
 
                         <button type="submit"
                                 class="auth-button">
+
                             Crear cuenta
+
                         </button>
 
                     </form>
@@ -259,7 +454,9 @@
                         <button type="button"
                                 id="btnMostrarLogin"
                                 class="auth-switch-button">
+
                             Iniciar sesión
+
                         </button>
 
                     </div>
@@ -268,10 +465,180 @@
 
             </div>
 
+        </section>
+
+
+
+        <!-- =========================================================
+             PRESENTACIÓN DE LA PLATAFORMA
+             Parte del proyecto: contenido visual de bienvenida.
+             Finalidad: acercar la página de acceso a la apariencia
+             de una plataforma de streaming sin agregar funciones
+             que no existan en el enunciado.
+             ========================================================= -->
+
+        <section class="experience-section">
+
+            <div class="section-heading">
+
+                <span class="section-eyebrow">
+                    DESCUBRE CINESTREAM CR
+                </span>
+
+                <h2>
+                    Todo pensado para tus películas
+                </h2>
+
+            </div>
+
+
+            <div class="experience-grid">
+
+                <article class="experience-card">
+
+                    <div class="experience-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Reproduce
+                    </h3>
+
+                    <p>
+                        Disfruta tus películas y continúa
+                        desde donde dejaste la reproducción.
+                    </p>
+
+                </article>
+
+
+                <article class="experience-card">
+
+                    <div class="experience-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path>
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Organiza
+                    </h3>
+
+                    <p>
+                        Crea WatchLists personalizadas
+                        y guarda tus películas favoritas.
+                    </p>
+
+                </article>
+
+
+                <article class="experience-card">
+
+                    <div class="experience-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M8 12l2.5 2.5L16 9"></path>
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Califica
+                    </h3>
+
+                    <p>
+                        Puntúa tus películas y comparte
+                        tu opinión mediante reseñas.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================================
+             CATÁLOGO VISUAL
+             Parte del proyecto: ambientación del acceso.
+             Finalidad: anticipar visualmente el catálogo que tendrá
+             la aplicación sin crear navegación falsa.
+             ========================================================= -->
+
+        <section class="preview-section">
+
+            <div class="preview-content">
+
+                <span class="section-eyebrow">
+                    GRANDES HISTORIAS TE ESPERAN
+                </span>
+
+                <h2>
+                    Encuentra algo para cada momento
+                </h2>
+
+
+                <div class="preview-categories">
+
+                    <span>Acción</span>
+                    <span>Drama</span>
+                    <span>Comedia</span>
+                    <span>Ciencia ficción</span>
+                    <span>Animación</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         FOOTER DE ACCESO
+         ========================================================= -->
+
+    <footer class="landing-footer">
+
+        <div class="footer-brand">
+
+            <span class="brand-cine">CINE</span>
+            <span class="brand-stream">STREAM</span>
+            <span class="brand-cr">CR</span>
+
         </div>
 
-    </div>
 
+        <p>
+            Plataforma académica de streaming de películas.
+        </p>
+
+
+        <div class="footer-separator"></div>
+
+
+        <span class="footer-copyright">
+            © @DateTime.Now.Year CineStream CR
+        </span>
+
+    </footer>
+
+
+
+    <!-- =========================================================
+         SCRIPTS
+         ========================================================= -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -282,6 +649,7 @@
     <script src="~/js/auth.js"
             asp-append-version="true">
     </script>
+
 
 </body>
 
