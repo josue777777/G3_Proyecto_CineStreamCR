@@ -1,0 +1,258 @@
+@model G3_Proyecto_CineStreamCR.DAL.Entidades.Pelicula
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reproduciendo: @Model.Titulo - CineStream CR</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hbo-purple: #9F53FF;
+            --hbo-dark-purple: #5F1BCE;
+            --bg-dark: #02020e;
+            --card-bg: rgba(26, 26, 46, 0.6);
+            --border-purple: rgba(159, 83, 255, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .video-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            outline: none;
+        }
+
+        /* Botón Volver Premium */
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 100;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: rgba(18, 18, 38, 0.6);
+            border: 1px solid var(--border-purple);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn:hover {
+            background: var(--hbo-purple);
+            border-color: var(--hbo-purple);
+            box-shadow: 0 0 15px var(--hbo-purple);
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        /* Título de la película al pasar el ratón por encima (Overlay) */
+        .player-overlay-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .video-container:hover .player-overlay-top {
+            opacity: 1;
+        }
+
+        .movie-title-indicator {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            background: linear-gradient(45deg, #ffffff, var(--hbo-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Notificación de reanudación */
+        .resume-toast {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            z-index: 100;
+            background: rgba(18, 18, 38, 0.85);
+            border: 1px solid var(--hbo-purple);
+            border-radius: 12px;
+            padding: 15px 30px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(159, 83, 255, 0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .resume-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .resume-toast-icon {
+            color: var(--hbo-purple);
+            font-size: 1.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <!-- Botón Volver -->
+        <a href="/Peliculas/Detalle/@Model.IdPelicula" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Volver a detalles
+        </a>
+
+        <!-- Overlay con título -->
+        <div class="player-overlay-top">
+            <h1 class="movie-title-indicator">@Model.Titulo</h1>
+        </div>
+
+        <!-- Reproductor HTML5 -->
+        <video id="mainPlayer" controls autoplay>
+            <source src="@(string.IsNullOrEmpty(Model.VideoUrl) ? Url.Content("~/videos/trailer_dummy.mp4") : Model.VideoUrl)" type="video/mp4">
+            Tu navegador no soporta reproducción de video HTML5.
+        </video>
+
+        <!-- Notificación de Progreso Reanudado -->
+        <div id="resumeToast" class="resume-toast">
+            <span class="resume-toast-icon">⏱</span>
+            <div>
+                <strong style="color: var(--hbo-purple)">Progreso reanudado</strong>
+                <div style="font-size: 0.85rem; color: #ccc;" id="resumeTimeText">Continuando desde el segundo 0...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const player = document.getElementById('mainPlayer');
+        const peliculaId = @Model.IdPelicula;
+        const segundoInicial = @(ViewBag.SegundoActual ?? 0);
+        const toast = document.getElementById('resumeToast');
+        const toastText = document.getElementById('resumeTimeText');
+
+        // Formatea segundos en formato MM:SS o HH:MM:SS
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return [
+                h > 0 ? h : null,
+                h > 0 ? String(m).padStart(2, '0') : m,
+                String(s).padStart(2, '0')
+            ].filter(Boolean).join(':');
+        }
+
+        // Restaurar progreso de reproducción
+        player.addEventListener('loadedmetadata', () => {
+            if (segundoInicial > 5 && segundoInicial < player.duration - 5) {
+                player.currentTime = segundoInicial;
+                
+                // Mostrar notificación premium de progreso
+                toastText.innerText = `Continuando la reproducción en ${formatTime(segundoInicial)}.`;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
+        });
+
+        // Función AJAX para guardar el progreso
+        function guardarProgreso() {
+            const currentTime = Math.floor(player.currentTime);
+            // Evitamos guardar si no ha empezado o si está al final
+            if (currentTime < 2) return;
+
+            const payload = {
+                idPelicula: peliculaId,
+                segundoActual: currentTime
+            };
+
+            fetch('/Reproductor/GuardarProgreso', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error("Error al guardar el progreso en el servidor.");
+                } else {
+                    console.log("Progreso guardado correctamente en: " + currentTime + "s");
+                }
+            })
+            .catch(error => console.error("Error de red guardando progreso:", error));
+        }
+
+        // Guardar cuando se pausa el video
+        player.addEventListener('pause', guardarProgreso);
+
+        // Guardar periódicamente cada 10 segundos
+        let ultimoGuardado = 0;
+        player.addEventListener('timeupdate', () => {
+            const ahora = Math.floor(player.currentTime);
+            if (ahora - ultimoGuardado >= 10) {
+                ultimoGuardado = ahora;
+                guardarProgreso();
+            }
+        });
+
+        // Guardar progreso al cerrar la pestaña o salir del navegador
+        window.addEventListener('pagehide', guardarProgreso);
+        window.addEventListener('beforeunload', guardarProgreso);
+    </script>
+</body>
+</html>

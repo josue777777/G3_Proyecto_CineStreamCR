@@ -1,0 +1,613 @@
+@model G3_Proyecto_CineStreamCR.DAL.Entidades.Pelicula
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --hbo-purple: #9F53FF;
+        --hbo-dark-purple: #5F1BCE;
+        --bg-dark: #0A0A16;
+        --card-bg: rgba(22, 22, 42, 0.6);
+        --border-purple: rgba(159, 83, 255, 0.2);
+    }
+
+    body.cinestream-body {
+        background-color: var(--bg-dark);
+        color: #ffffff;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    /* Contenedor de Detalle */
+    .movie-detail-container {
+        padding-top: 30px;
+        margin-bottom: 60px;
+    }
+
+    /* Banner con gradiente */
+    .movie-banner {
+        position: relative;
+        background: linear-gradient(135deg, rgba(10, 10, 22, 0.95) 0%, rgba(95, 27, 206, 0.15) 100%);
+        border: 1px solid var(--border-purple);
+        border-radius: 24px;
+        padding: 40px;
+        overflow: hidden;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .movie-banner-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .poster-col {
+        flex: 0 0 300px;
+    }
+
+    .info-col {
+        flex: 1 1 500px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Estilo del Poster */
+    .detail-poster-wrapper {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--hbo-purple);
+        box-shadow: 0 0 25px rgba(159, 83, 255, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .detail-poster-wrapper:hover {
+        transform: scale(1.02);
+    }
+
+    .detail-poster {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Detalles textuales */
+    .detail-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        line-height: 1.1;
+        background: linear-gradient(45deg, #ffffff, var(--hbo-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .detail-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+    }
+
+    .detail-meta-item {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 4px 12px;
+        border-radius: 6px;
+        color: #d1d5db;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-rating {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        color: #ffc107;
+        font-weight: 600;
+    }
+
+    .genre-badge {
+        background: rgba(159, 83, 255, 0.15);
+        border: 1px solid var(--hbo-purple);
+        color: #e8d5ff;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .detail-synopsis-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--hbo-purple);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .detail-synopsis {
+        font-size: 1.05rem;
+        color: #d1d5db;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .people-info {
+        margin-bottom: 30px;
+        font-size: 1rem;
+        color: #cbd5e1;
+    }
+
+    .people-info strong {
+        color: white;
+    }
+
+    /* Botones de acción */
+    .detail-actions-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: auto;
+    }
+
+    .btn-play-movie {
+        padding: 14px 30px;
+        font-size: 1.1rem;
+        background: var(--hbo-purple);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(159, 83, 255, 0.4);
+    }
+
+    .btn-play-movie:hover {
+        background: var(--hbo-dark-purple);
+        box-shadow: 0 0 25px rgba(159, 83, 255, 0.6);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-trailer-movie {
+        padding: 14px 30px;
+        font-size: 1.1rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        border: 1px solid var(--border-purple);
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-trailer-movie:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--hbo-purple);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Sección de Reseñas */
+    .reviews-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-purple);
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 40px;
+        backdrop-filter: blur(10px);
+    }
+
+    .reviews-title {
+        color: var(--hbo-purple);
+        font-weight: 700;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Lista de opiniones */
+    .review-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .review-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(159, 83, 255, 0.3);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .review-user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .review-avatar {
+        width: 36px;
+        height: 36px;
+        background: var(--hbo-purple);
+        color: white;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.95rem;
+    }
+
+    .review-username {
+        font-weight: 600;
+        color: #f3f4f6;
+    }
+
+    .review-rating-badge {
+        background: rgba(159, 83, 255, 0.15);
+        border: 1px solid var(--hbo-purple);
+        color: #e8d5ff;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .review-text {
+        color: #d1d5db;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        white-space: pre-line;
+    }
+
+    /* Formulario */
+    .review-form-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 24px;
+        margin-top: 30px;
+    }
+
+    .review-form-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    .form-label-custom {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #9da4c0;
+        margin-bottom: 6px;
+    }
+
+    .form-control-custom {
+        background: rgba(10, 10, 22, 0.8) !important;
+        border: 1px solid var(--border-purple) !important;
+        color: white !important;
+        border-radius: 8px;
+        padding: 10px 15px;
+    }
+
+    .form-control-custom:focus {
+        border-color: var(--hbo-purple) !important;
+        box-shadow: 0 0 10px rgba(159, 83, 255, 0.4) !important;
+    }
+
+    .btn-submit-review {
+        background: var(--hbo-purple);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit-review:hover {
+        background: var(--hbo-dark-purple);
+        box-shadow: 0 0 15px rgba(159, 83, 255, 0.4);
+    }
+
+    /* Mini-reproductor Flotante */
+    .mini-player-card {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        z-index: 10000;
+        border: 2px solid var(--hbo-purple);
+        border-radius: 16px;
+        background: #000;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .mini-player-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px;
+        background: rgba(18, 18, 38, 0.9);
+        border-bottom: 1px solid rgba(159, 83, 255, 0.2);
+    }
+
+    .mini-player-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #e8d5ff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 220px;
+    }
+
+    .mini-player-close {
+        background: none;
+        border: none;
+        color: #ff4a4a;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .mini-player-close:hover {
+        transform: scale(1.2);
+    }
+
+    .mini-video {
+        width: 100%;
+        display: block;
+    }
+</style>
+
+<div class="container movie-detail-container">
+    <!-- Botón Volver -->
+    <a href="/Peliculas/Index" class="btn btn-link text-decoration-none text-white-50 mb-3 fs-5 ps-0">
+        &larr; Volver al catálogo
+    </a>
+
+    <!-- Banner Principal -->
+    <div class="movie-banner">
+        <div class="movie-banner-row">
+            <!-- Columna Poster -->
+            <div class="poster-col">
+                <div class="detail-poster-wrapper">
+                    <img class="detail-poster" src="@Model.PosterUrl" alt="Póster de @Model.Titulo" />
+                </div>
+            </div>
+
+            <!-- Columna Datos -->
+            <div class="info-col">
+                <h1 class="detail-title">@Model.Titulo</h1>
+
+                <div class="detail-meta-row">
+                    <span class="detail-meta-item detail-rating">⭐ @(Model.Rating > 0 ? Model.Rating.ToString("0.0") : "Sin calificación") / 10.0</span>
+                    <span class="detail-meta-item">📅 @Model.Anio</span>
+                    <span class="detail-meta-item">⏱ @Model.DuracionMinutos min</span>
+
+                    <!-- Géneros -->
+                    @foreach (var pg in Model.PeliculaGeneros)
+                    {
+                        <span class="genre-badge">@pg.Genero.Nombre</span>
+                    }
+                </div>
+
+                <div class="detail-synopsis-label">Sinopsis</div>
+                <p class="detail-synopsis">@Model.Sinopsis</p>
+
+                <div class="people-info">
+                    <div><strong>Director:</strong> @(Model.Director?.Nombre ?? "No asignado")</div>
+                    <div class="mt-2">
+                        <strong>Elenco:</strong> 
+                        @(Model.PeliculaActores.Any() 
+                            ? string.Join(", ", Model.PeliculaActores.Select(pa => $"{pa.Actor.Nombre} ({pa.Personaje})")) 
+                            : "No especificado")
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="detail-actions-row">
+                    <a href="/Reproductor/Ver/@Model.IdPelicula" class="btn-play-movie">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Ver Película
+                    </a>
+                    <button class="btn-trailer-movie" onclick="abrirMiniPlayer()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                        Ver Tráiler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Reseñas y Calificaciones -->
+    <div class="reviews-card">
+        <h3 class="reviews-title">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Reseñas de Usuarios
+        </h3>
+
+        <!-- Contenedor de opiniones por AJAX -->
+        <div id="lista-resenas">
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando reseñas...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario para dejar reseña -->
+        <div class="review-form-container">
+            <h4 class="review-form-title">Deja tu reseña</h4>
+            <form id="formResena">
+                <input type="hidden" id="peliculaId" value="@Model.IdPelicula" />
+
+                <div class="row">
+                    <!-- Selector de Calificación (1 a 10) -->
+                    <div class="col-md-4 mb-3">
+                        <label for="puntuacion" class="form-label-custom">Calificación</label>
+                        <select id="puntuacion" class="form-select form-control-custom">
+                            <option value="10">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ 10 (Obra Maestra)</option>
+                            <option value="9">⭐⭐⭐⭐⭐⭐⭐⭐⭐ 9 (Excelente)</option>
+                            <option value="8">⭐⭐⭐⭐⭐⭐⭐⭐ 8 (Muy Buena)</option>
+                            <option value="7">⭐⭐⭐⭐⭐⭐⭐ 7 (Buena)</option>
+                            <option value="6">⭐⭐⭐⭐⭐⭐ 6 (Regular-Buena)</option>
+                            <option value="5">⭐⭐⭐⭐⭐ 5 (Regular)</option>
+                            <option value="4">⭐⭐⭐⭐ 4 (Mala)</option>
+                            <option value="3">⭐⭐⭐ 3 (Muy Mala)</option>
+                            <option value="2">⭐⭐ 2 (Pésima)</option>
+                            <option value="1">⭐ 1 (Inaudible)</option>
+                        </select>
+                    </div>
+
+                    <!-- Comentario -->
+                    <div class="col-12 mb-3">
+                        <label for="comentario" class="form-label-custom">Comentario (opcional)</label>
+                        <textarea id="comentario" class="form-control form-control-custom" rows="3" placeholder="Escribe tu opinión sobre la película aquí..."></textarea>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-submit-review" onclick="enviarResena()">Publicar Reseña</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Mini-reproductor Flotante -->
+<div id="mini-player" class="mini-player-card">
+    <div class="mini-player-header">
+        <span class="mini-player-title" title="Tráiler de @Model.Titulo">Tráiler: @Model.Titulo</span>
+        <button class="mini-player-close" onclick="cerrarMiniPlayer()">✕</button>
+    </div>
+    <video id="miniVideo" src="@(string.IsNullOrEmpty(Model.VideoUrl) ? Url.Content("~/videos/trailer_dummy.mp4") : Model.VideoUrl)" class="mini-video" controls muted></video>
+</div>
+
+<script>
+    const peliculaId = document.getElementById("peliculaId").value;
+
+    // Ejecutar al cargar la página
+    document.addEventListener("DOMContentLoaded", () => {
+        cargarResenas();
+    });
+
+    // Carga las reseñas dinámicamente mediante AJAX (GET)
+    function cargarResenas() {
+        const contenedor = document.getElementById("lista-resenas");
+
+        fetch(`/Peliculas/ObtenerResenas/${peliculaId}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Error cargando reseñas");
+                return response.json();
+            })
+            .then(data => {
+                contenedor.innerHTML = "";
+                if (data.length === 0) {
+                    contenedor.innerHTML = `
+                        <div class="text-center py-4 text-muted border-0" style="background: rgba(255,255,255,0.01); border-radius: 8px;">
+                            No hay reseñas disponibles para esta película. ¡Sé el primero en dejar una!
+                        </div>`;
+                    return;
+                }
+
+                data.forEach(item => {
+                    const stars = "⭐".repeat(item.puntuacion);
+                    const inicial = item.nombreUsuario ? item.nombreUsuario.charAt(0).toUpperCase() : "U";
+                    const comentario = item.resena ? item.resena : "<em class='text-muted'>Sin comentario escrito.</em>";
+
+                    const reviewHtml = `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="review-user-info">
+                                    <div class="review-avatar">${inicial}</div>
+                                    <span class="review-username">${item.nombreUsuario}</span>
+                                </div>
+                                <span class="review-rating-badge">${item.puntuacion} / 10 ${stars.substring(0, 3)}</span>
+                            </div>
+                            <div class="review-text">${comentario}</div>
+                        </div>`;
+                    contenedor.insertAdjacentHTML('beforeend', reviewHtml);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                contenedor.innerHTML = `<div class="alert alert-danger">Error al cargar reseñas.</div>`;
+            });
+    }
+
+    // Envía la reseña mediante AJAX (POST)
+    function enviarResena() {
+        const puntuacionVal = document.getElementById("puntuacion").value;
+        const comentarioVal = document.getElementById("comentario").value;
+
+        const data = {
+            IdPelicula: parseInt(peliculaId),
+            Puntuacion: parseInt(puntuacionVal),
+            Resena: comentarioVal
+        };
+
+        fetch('/Peliculas/AgregarResena', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("¡Tu reseña se ha guardado exitosamente!");
+                document.getElementById("comentario").value = "";
+                // Recargar dinámicamente las reseñas y refrescar el rating global si es necesario
+                cargarResenas();
+            } else {
+                alert("Error al enviar la reseña. Por favor verifica si tu sesión está activa.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Ocurrió un error al procesar tu solicitud.");
+        });
+    }
+
+    // Control del Mini-player flotante
+    const miniPlayer = document.getElementById('mini-player');
+    const miniVideo = document.getElementById('miniVideo');
+
+    function abrirMiniPlayer() {
+        miniPlayer.style.display = 'block';
+        miniVideo.play().catch(e => console.log("Auto-play blocked or error: ", e));
+    }
+
+    function cerrarMiniPlayer() {
+        miniVideo.pause();
+        miniPlayer.style.display = 'none';
+    }
+</script>

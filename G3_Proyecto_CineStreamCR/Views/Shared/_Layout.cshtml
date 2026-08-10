@@ -1,4 +1,4 @@
-﻿@{
+@{
     var nombreUsuario =
         Context.Session.GetString("NombreUsuario") ?? "Usuario";
 
@@ -58,10 +58,15 @@
                     Inicio
                 </a>
 
+                <a asp-controller="Peliculas"
+                   asp-action="Index"
+                   class="header-nav-link">
+                    Películas
+                </a>
+
                 <!--
                 Se habilitarán cuando existan sus módulos reales.
 
-                <a class="header-nav-link">Películas</a>
                 <a class="header-nav-link">Mi lista</a>
                 -->
 
@@ -193,10 +198,11 @@
 
 
             <!-- Catálogo -->
-            <button type="button"
-                    class="aside-item"
-                    title="Películas"
-                    aria-label="Películas">
+            <a asp-controller="Peliculas"
+               asp-action="Index"
+               class="aside-item"
+               title="Películas"
+               aria-label="Películas">
 
                 <svg viewBox="0 0 24 24"
                      aria-hidden="true">
@@ -212,7 +218,7 @@
 
                 </svg>
 
-            </button>
+            </a>
 
 
             <!-- WatchList -->

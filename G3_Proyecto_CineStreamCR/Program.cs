@@ -2,6 +2,9 @@ using G3_Proyecto_CineStreamCR.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using G3_Proyecto_CineStreamCR.BLL.Services.Usuario;
 using G3_Proyecto_CineStreamCR.DAL.Repositorios.Usuario;
+using G3_Proyecto_CineStreamCR.BLL.Services.Calificacion;
+using G3_Proyecto_CineStreamCR.BLL.Services.Reproduccion;
+using G3_Proyecto_CineStreamCR.Data;
 
 
 // Program.cs
@@ -46,8 +49,9 @@ builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 // Servicio de lógica de negocio para autenticación y usuarios.
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 
-// Los repositorios y servicios BLL se registrarán posteriormente
-// conforme se implemente cada módulo.
+// Registra dependencias de calificación y reproducción.
+builder.Services.AddScoped<ICalificacionService, CalificacionService>();
+builder.Services.AddScoped<IReproduccionService, ReproduccionService>();
 
 // ====================== CONSTRUCCIÓN DE LA APP ======================
 
@@ -92,5 +96,11 @@ app.MapControllerRoute(
 
 
 // ====================== EJECUCIÓN ======================
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DbInitializer.SeedAsync(dbContext);
+}
 
 app.Run();
